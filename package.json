@@ -1,0 +1,27 @@
+{
+  "name": "resume",
+  "version": "1.0.0",
+  "description": "Application that generates a free Résumé",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ohstopityou/Resume.git"
+  },
+  "keywords": [
+    "resume",
+    "cv",
+    "free",
+    "generator",
+    "minimalistic",
+    "simple"
+  ],
+  "author": "Thomas Søvik",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ohstopityou/Resume/issues"
+  },
+  "homepage": "https://github.com/ohstopityou/Resume#readme"
+}
