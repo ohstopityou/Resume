@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../public/css/styles.css">
-    <title>Document</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="../public/css/main.css">
+    <title>Resume Builder</title>
 </head>
 <body>
   <header>
@@ -25,11 +26,14 @@
 
     </section>
     <section id="preview">
-      <div id="resume" class="paper">
-        <div class="inner">Render Here</div>
+      <div id="preview-inner">
+        <iframe src="//localhost:8080/resume" class="paper"></iframe> 
       </div>
+      <button id="toggleEditor">Toggle editor</button>
     </section>
   </main>
   <!-- Insert Footer -->
 </body>
+<script src="../public/js/main.js"></script>
+<script src="js/main.js"></script>
 </html>

@@ -11,11 +11,12 @@ app.use(express.static(publicFolder))
 app.set('view engine', 'ejs')
 
 app.get('/', (req, res) => {
-  res.send('<h1>Hello</h1>')
+  res.sendFile(path.join(__dirname, '/views/editor.html'))
 })
 
-app.get('/pre', (req, res) => {
-  res.render('preview')
+app.get('/resume', (req, res) => {
+  //res.render('preview') !
+  res.sendFile(path.join(__dirname, '/views/resume.html'))
 })
 
 app.listen(8080, () => {
