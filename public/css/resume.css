@@ -34,11 +34,7 @@ body {
   border: 1px solid black;
 }
 
-section{
-  padding: 1em;
-}
-
-#profilePic {
+#picture {
   height: 10em;
   border-radius: 50%;
 }
@@ -47,18 +43,34 @@ section{
   width: 70%;
 }
 
-.sidebar {
+aside {
   width: 3 0%;
   color: #fff;
   background: #0af;
 }
 
-.sidebar h3 {
+aside h3 {
   background: rgba(0,0,0,0.3);
 }
 
-.sidebar h4 {
+#address, #city, #name, #title {
+  text-transform: capitalize;
+}
+
+.duration {
+  font-family: sans-serif;
+  text-transform: uppercase;
+  font-weight: 300;
+}
+
+.title {
+  text-transform: capitalize;
   font-weight: bold;
+}
+
+.origin {
+  font-style: italic;
+  font-weight: 300;
 }
 
 /* Print */
@@ -72,9 +84,5 @@ section{
   html {
     margin: 0;
     padding: 0;
-  }
-  
-  body {
-    background: red;
   }
 }

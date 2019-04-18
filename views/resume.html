@@ -7,19 +7,18 @@
       <title>Resume Preview</title>
   </head>
   <body>
-      <section class="sidebar">
-        <img src="https://www.bluecross.org.uk/sites/default/files/styles/content_large/public/assets/images/kitten%20PP2.jpg?itok=TcekZ7ZM" alt="profile picture" id="profilePic">
-        <div>
+      <aside>
+        <img src="https://www.bluecross.org.uk/sites/default/files/styles/content_large/public/assets/images/kitten%20PP2.jpg?itok=TcekZ7ZM" alt="profile picture" id="picture">
+        <section id="contact-info">
           <h3>Contact Info</h3>
           <ul>
-            <li>Hello</li>
-            <li>Hi</li>
-            <li>We</li>
-            <li>Like</li>
-            <li>Sportz</li>
+            <li id="email">thomasovik@gmail.com</li>
+            <li id="phone">47330215</li>
+            <li id="address">Grønlandsveien 8a</li>
+            <li><span id="post-code">5918</span> <span id="city">frekhaug</span></li>
           </ul>  
-        </div>
-        <div>
+        </section>
+        <section id="skills">
           <h3>Skills</h3>
           <ul>
             <li>HTML</li>
@@ -27,14 +26,49 @@
             <li>JavaScript</li>
             <li>Node</li>
           </ul>
-        </div>
+        </section>
+        <section id="certifications">
+          <h3>Certifications</h3>
+          <ul>
+            <li><span class="title">System Administrator</span> - <span class="origin">ServiceNow</span></li>
+          </ul>
+        </section>
  
-      </section>
-      <section class="content">
-        <h1 id="name">Thomas Søvik</h1>
-        <h2 id="jobTitle">Support Technician</h2>
-        <h2>Projects</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda nisi sapiente voluptate animi aspernatur itaque. Magnam amet animi ratione alias explicabo corporis harum cumque earum, maxime voluptates, obcaecati, maiores ipsum.</p>
-      </section>
+      </aside>
+      <div class="content">
+        <header>
+          <h1 id="name" class="capitalize">Thomas Søvik</h1>
+          <h2 id="work-title">Support Technician</h2>
+          <p id="about">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda nisi sapiente voluptate animi aspernatur itaque. Magnam amet animi ratione alias explicabo corporis harum cumque earum, maxime voluptates, obcaecati, maiores ipsum.</p>
+        </header>
+        <section id="experience">
+          <h3>Experience</h3>
+          <div>
+            <p class="duration"><time>August 2012</time> - <time>AUGUST 2018</time></p>
+            <h4><span class="title">Support Technician</span> - <span class="origin">Marin IT</span></h4>
+            <p class="summary">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis enim quas illo et, iste optio, adipisci dolor placeat veritatis, non sint harum officia! Sapiente architecto placeat sunt. Sed, quae, animi?</p>
+          </div>
+          <div>
+            <p class="duration"><time>August 2018</time> - <time>present</time></p>
+            <h4><span class="title">System Developer</span> - <span class="origin">Marin IT</span></h4>
+            <p class="summary">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime, officia! Tempora fuga molestias reiciendis, doloribus cumque, illo, quis non ipsum nobis amet beatae placeat dolor obcaecati porro a fugiat? Iusto!</p>
+          </div>
+        </section>
+        <section id="education">
+          <h3>Education</h3>
+          <div>
+            <p class="duration"><time>AUGUST 2016</time> - <time>PRESENT</time></p>
+            <h4><span class="title">Information Science</span> - <span class="origin">University of Bergen</span></h4>
+            <p class="summary">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime, officia! Tempora fuga molestias reiciendis, doloribus cumque, illo, quis non ipsum nobis amet beatae placeat dolor obcaecati porro a fugiat? Iusto!</p>
+          </div>
+          
+          <div>
+            <p class="duration"><time></time> - <time></time></p>
+            <h4><span class="title"></span> - <span class="origin"></span></h4>
+            <p class="summary"></p>
+          </div>
+          
+        </section>
+      </div>
   </body>
 </html>
