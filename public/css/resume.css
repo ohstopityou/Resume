@@ -22,13 +22,6 @@ img {
 
 /* Styling */
 
-h1, h2, h3, h4 {
-  font-family: 'Roboto', sans-serif;
-  color: #222;
-  margin: 0;
-  padding: 0;
-}
-
 body {
   display: flex;
   border: 1px solid black;
@@ -39,18 +32,52 @@ body {
   border-radius: 50%;
 }
 
+/* Main Section */
+
 .content {
   width: 70%;
+  padding: 1em;
 }
 
+.wrapper {
+  margin: 1em 0;
+}
+
+/* Sidebar */
+
 aside {
-  width: 3 0%;
+  width: 30%;
   color: #fff;
   background: #0af;
 }
 
-aside h3 {
-  background: rgba(0,0,0,0.3);
+/* Text Styling */
+
+h1, h2, h3, h4 {
+  margin: 0;
+  padding: 0;
+}
+
+p, li {
+  font-family: sans-serif;
+}
+
+#name {
+  font-size: 2.5em;
+  color: #222;
+}
+
+#work-title {
+  color: #555;
+  margin-bottom: 1em;
+}
+
+.summary {
+  text-align: left;
+  color: #444;
+  line-height: 1.5;
+  font-weight: 300;
+  margin: 0.5em 0;
 }
 
 #address, #city, #name, #title {
@@ -58,9 +85,10 @@ aside h3 {
 }
 
 .duration {
-  font-family: sans-serif;
   text-transform: uppercase;
   font-weight: 300;
+  margin-bottom: 3px;
+  font-size: 0.8em;
 }
 
 .title {
@@ -71,6 +99,21 @@ aside h3 {
 .origin {
   font-style: italic;
   font-weight: 300;
+}
+
+.content h3 {
+  color: #0af;
+  font-size: 1.5em;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+h4 {
+  font-size: 1.2em;
+}
+
+aside h3 {
+  background: rgba(0,0,0,0.3);
 }
 
 /* Print */
