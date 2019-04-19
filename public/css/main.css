@@ -90,7 +90,46 @@ header {
   flex-grow: 0;
   flex-shrink: 1;
   flex-basis: 50%;
-  min-width: 300px;
+  min-width: 700px;
+  overflow: scroll;
+}
+
+#editor .inner {
+  height: 100%;
+  padding: 1em;
+  margin: auto;
+}
+
+form {
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+form div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  
+  margin: 1em auto;
+}
+
+label {
+  display: flex;
+  flex-basis: 300px;
+  flex-grow: 1;
+  color: #333;
+  margin: 0.5em;
+}
+
+input {
+  flex-grow: 1;
+  outline: none;
+  border: 0;
+  padding : 0.5em;
+  margin-left: 1em;
+  border-radius: 2px;
+  background: #eee;
 }
 
 #preview {
@@ -106,25 +145,16 @@ header {
 #preview-inner {
   margin: 3em auto;
   width: calc(var(--a4-w) * var(--resume-scale));
+  height: calc(var(--a4-h) * var(--resume-scale));
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  overflow: hidden;
 }
 
 #preview iframe {
   border: 0;
-  width: var(--a4-w);
-  height: var(--a4-h);
   transform: scale(var(--resume-scale));
   transform-origin: 0 0;
-}
-
-#editor {
-  display: block;
-}
-
-#editor .inner {
-  height: 100%;
-  max-width: 500px;
-  margin: auto;
-  border: 1px solid black;
 }
 
 #toggleEditor {
@@ -135,9 +165,11 @@ header {
 }
 
 .paper {
+  width: var(--a4-w);
+  height: var(--a4-h);
   background: #fff;
-  border-radius: 5px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
 button, .button {
@@ -161,5 +193,11 @@ button, .button {
 @media only screen and (max-width: 1000px) {
   :root {
     --resume-scale: 0.5; 
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  :root {
+    --resume-scale: 0.9; 
   }
 }

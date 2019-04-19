@@ -16,12 +16,38 @@
     <section id="editor">
       <div class="inner">
         <form autocomplete="off">
-          <label for="name">Name</label>
-          <input type="text" name="Name">
-          <label for="email">Email</label>
-          <input type="text" name="email">
-          <button>Send</button>
+        <h2>Personal Info</h2>
+        <div>
+          <label name="first-name">First Name<input></label>
+          <label name="last-name">Last Name<input></label>
+          <label name="title">Title<input></label>
+          <label name="email">Email<input></label>
+          <label name="phone">Phone<input></label>
+          <label name="address">Address<input></label>
+          <label name="post-code">Post code<input></label>
+          <label name="city">City<input></label>
+        </div>
+        
+        <h2>Experience</h2>
+        <div>
+          <label name="exp-title">Title<input></label>
+          <label name="exp-location">Location<input></label>
+          <label name="exp-from">From<input></label>
+          <label name="exp-to">To<input></label>
+          <label name="exp-summary">Summary<input></label>
+        </div>
+        
+        <h2>Education</h2>
+        <div>
+          <label name="edu-title">Title<input></label>
+          <label name="edu-location">Location<input></label>
+          <label name="edu-from">From<input></label>
+          <label name="edu-to">To<input></label>
+          <label name="edu-summary">Summary<input></label>
+        </div>
         </form>
+        <button>Save</button>
+        <button>Preview</button>
       </div>
 
     </section>
@@ -32,7 +58,6 @@
       <button id="toggleEditor">Toggle editor</button>
     </section>
   </main>
-  <!-- Insert Footer -->
 </body>
 <script src="../public/js/main.js"></script>
 <script src="js/main.js"></script>
