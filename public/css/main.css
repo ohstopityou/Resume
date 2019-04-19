@@ -29,6 +29,12 @@
   cursor: pointer;
 */
 
+:root {
+  --resume-scale: 0.7;
+  --a4-h: 29.7cm;
+  --a4-w: 21cm;
+}
+
 /*CSS Reset*/
 html {
   box-sizing: border-box;
@@ -79,29 +85,35 @@ header {
   text-align: center;
 }
 
-#editor, #previe {
+#editor {
   display: flex;
-  flex: 1 1;
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: 50%;
+  min-width: 300px;
 }
 
 #preview {
-  width: 50%;
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 0;
+  
   background: #eee;
-  padding: 3em 5em;
   overflow: scroll;
+  padding: 0 2em;
 }
 
 #preview-inner {
-  transform: scale(0.7);
-  transform-origin: 0 0;
-  width: 21cm;
-  height: 29.7cm;
+  margin: 3em auto;
+  width: calc(var(--a4-w) * var(--resume-scale));
 }
 
 #preview iframe {
   border: 0;
-  height: 100%;
-  width: 100%;
+  width: var(--a4-w);
+  height: var(--a4-h);
+  transform: scale(var(--resume-scale));
+  transform-origin: 0 0;
 }
 
 #editor {
@@ -112,7 +124,6 @@ header {
   height: 100%;
   max-width: 500px;
   margin: auto;
-  
   border: 1px solid black;
 }
 
@@ -145,4 +156,10 @@ button, .button {
   vertical-align: middle;
   
   cursor: pointer;
+}
+
+@media only screen and (max-width: 1000px) {
+  :root {
+    --resume-scale: 0.5; 
+  }
 }
