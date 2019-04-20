@@ -29,12 +29,6 @@
   cursor: pointer;
 */
 
-:root {
-  --resume-scale: 0.7;
-  --a4-h: 29.7cm;
-  --a4-w: 21cm;
-}
-
 /*CSS Reset*/
 html {
   box-sizing: border-box;
@@ -191,14 +185,20 @@ button, .button {
   cursor: pointer;
 }
 
+:root {
+  --resume-scale: 0.6;
+  --a4-h: 29.7cm;
+  --a4-w: 21cm;
+}
+
 @media only screen and (max-width: 1000px) {
   :root {
-    --resume-scale: 0.5; 
+    --resume-scale: 0.4; 
   }
 }
 
 @media only screen and (min-width: 1200px) {
   :root {
-    --resume-scale: 0.9; 
+    --resume-scale: 0.8; 
   }
 }

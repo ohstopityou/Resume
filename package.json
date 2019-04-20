@@ -26,8 +26,10 @@
   },
   "homepage": "https://github.com/ohstopityou/Resume#readme",
   "dependencies": {
+    "body-parser": "^1.18.3",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
+    "morgan": "^1.9.1",
     "mysql2": "^1.6.5"
   },
   "devDependencies": {

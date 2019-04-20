@@ -18,22 +18,22 @@
         <form autocomplete="off" action="//localhost:8080/resume/1" method="put">
         <h2>Personal Info</h2>
         <div>
-          <label name="first-name">First Name<input></label>
-          <label name="last-name">Last Name<input></label>
+          <label name="name">Name<input></label>
+          <label name="picture">Picture<input type="file"></label>
           <label name="title">Title<input></label>
-          <label name="email">Email<input></label>
-          <label name="phone">Phone<input></label>
+          <label name="email">Email<input type="email"></label>
+          <label name="phone">Phone<input type="tel"></label>
           <label name="address">Address<input></label>
-          <label name="post-code">Post code<input></label>
           <label name="city">City<input></label>
+          <label name="post-code">Post code<input></label>
         </div>
         
         <h2>Experience</h2>
         <div>
           <label name="exp-title">Title<input></label>
           <label name="exp-location">Location<input></label>
-          <label name="exp-from">From<input></label>
-          <label name="exp-to">To<input></label>
+          <label name="exp-from">From<input type="date"></label>
+          <label name="exp-to">To<input type="date"></label>
           <label name="exp-summary">Summary<textarea rows="8"></textarea></label>
         </div>
         
@@ -41,8 +41,8 @@
         <div>
           <label name="edu-title">Title<input></label>
           <label name="edu-location">Location<input></label>
-          <label name="edu-from">From<input></label>
-          <label name="edu-to">To<input></label>
+          <label name="edu-from">From<input type="date"></label>
+          <label name="edu-to">To<input type="date"></label>
           <label name="edu-summary">Summary<textarea rows="8"></textarea></label>
         </div>
         </form>
