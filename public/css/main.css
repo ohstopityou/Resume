@@ -122,9 +122,10 @@ label {
   margin: 0.5em;
 }
 
-input {
+input, textarea {
   flex-grow: 1;
   outline: none;
+  resize: none;
   border: 0;
   padding : 0.5em;
   margin-left: 1em;
