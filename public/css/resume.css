@@ -16,6 +16,7 @@ ol, ul {
 }
 
 img {
+  display: block;
   max-width: 100%;
   height: auto;
 }
@@ -28,7 +29,9 @@ body {
 
 #picture {
   height: 10em;
+  width: 10em;
   border-radius: 50%;
+  margin: 2em;auto;
 }
 
 /* Main Section */
@@ -113,6 +116,16 @@ h4 {
 
 aside h3 {
   background: rgba(0,0,0,0.3);
+  padding-left: 1em;
+  line-height: 1.5em;
+}
+
+aside ul {
+  padding-left: 1em;
+}
+
+aside li {
+  margin: 0.5em 0;
 }
 
 /* Print */
