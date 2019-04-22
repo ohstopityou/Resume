@@ -1,24 +1,9 @@
+@import 'reset';
+
 html, body {
-  box-sizing: border-box;
   font-size: 16px;
   width: 21cm;
   height: 29.7cm;
-  margin: 0;
-  padding: 0;
-}
-
-* {
-  box-sizing: inherit;
-}
-
-ol, ul {
-  list-style: none;
-}
-
-img {
-  display: block;
-  max-width: 100%;
-  height: auto;
 }
 
 /* Styling */

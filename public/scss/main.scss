@@ -18,7 +18,7 @@
   /* Color
   background: #000;
   color: #fff
-
+  
   /* Text
   font-family: sans-serif;
   font-size: 16px;
@@ -28,35 +28,14 @@
   /* Other
   cursor: pointer;
 */
-html {
-  box-sizing: border-box;
-  font-size: 16px;
-  overflow: hidden;
-}
 
-*, *:before, *:after {
-  box-sizing: inherit;
-}
-
-html, body, h1, h2, h3, h4, h5, h6, p, ol, ul {
-  margin: 0;
-  padding: 0;
-}
-
-ol, ul {
-  list-style: none;
-}
-
-img {
-  display: block;
-  max-width: 100%;
-  height: auto;
-}
+@import 'reset';
 
 body {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  
   background-color: #fff;
 }
 
@@ -71,6 +50,7 @@ header {
   align-items: center;
   justify-content: space-between;
   padding: 0 3em;
+  
   background: lightblue;
   height: 3em;
   text-align: center;
@@ -101,6 +81,7 @@ form div {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+  
   margin: 1em auto;
 }
 
@@ -117,7 +98,7 @@ input, textarea {
   outline: none;
   resize: none;
   border: 0;
-  padding: 0.5em;
+  padding : 0.5em;
   margin-left: 1em;
   border-radius: 2px;
   background: #eee;
@@ -127,6 +108,7 @@ input, textarea {
   display: flex;
   flex-grow: 1;
   flex-shrink: 0;
+  
   background: #eee;
   overflow: scroll;
   padding: 0 2em;
@@ -137,7 +119,7 @@ input, textarea {
   width: calc(var(--a4-w) * var(--resume-scale));
   height: calc(var(--a4-h) * var(--resume-scale));
   border-radius: 6px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   overflow: hidden;
 }
 
@@ -159,7 +141,7 @@ input, textarea {
   height: var(--a4-h);
   background: #fff;
   border-radius: 6px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
 button, .button {
@@ -168,12 +150,15 @@ button, .button {
   border-radius: 3px;
   box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.2);
   margin: 5px;
+  
   color: darkorange;
   background: white;
+
   font-size: 1rem;
   font-weight: bold;
   text-align: center;
   vertical-align: middle;
+  
   cursor: pointer;
 }
 
@@ -185,13 +170,12 @@ button, .button {
 
 @media only screen and (max-width: 1000px) {
   :root {
-    --resume-scale: 0.4;
-  }
-}
-@media only screen and (min-width: 1200px) {
-  :root {
-    --resume-scale: 0.8;
+    --resume-scale: 0.4; 
   }
 }
 
-/*# sourceMappingURL=main.css.map */
+@media only screen and (min-width: 1200px) {
+  :root {
+    --resume-scale: 0.8; 
+  }
+}
