@@ -1,4 +1,27 @@
-@import 'reset';
+html {
+  box-sizing: border-box;
+  font-size: 16px;
+  overflow: hidden;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+html, body, h1, h2, h3, h4, h5, h6, p, ol, ul {
+  margin: 0;
+  padding: 0;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
 
 html, body {
   font-size: 16px;
@@ -7,7 +30,6 @@ html, body {
 }
 
 /* Styling */
-
 body {
   display: flex;
 }
@@ -16,11 +38,10 @@ body {
   height: 10em;
   width: 10em;
   border-radius: 50%;
-  margin: 2em;auto;
+  margin: 2em auto;
 }
 
 /* Main Section */
-
 .content {
   width: 70%;
   padding: 1em;
@@ -31,7 +52,6 @@ body {
 }
 
 /* Sidebar */
-
 aside {
   width: 30%;
   color: #fff;
@@ -39,12 +59,6 @@ aside {
 }
 
 /* Text Styling */
-
-h1, h2, h3, h4 {
-  margin: 0;
-  padding: 0;
-}
-
 p, li {
   font-family: sans-serif;
 }
@@ -100,7 +114,7 @@ h4 {
 }
 
 aside h3 {
-  background: rgba(0,0,0,0.3);
+  background: rgba(0, 0, 0, 0.3);
   padding-left: 1em;
   line-height: 1.5em;
 }
@@ -114,15 +128,15 @@ aside li {
 }
 
 /* Print */
-
 @page {
   size: A4;
   margin: 0;
 }
-
 @media print {
   html {
     margin: 0;
     padding: 0;
   }
 }
+
+/*# sourceMappingURL=resume.css.map */
