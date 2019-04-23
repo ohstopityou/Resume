@@ -154,6 +154,13 @@ input, textarea {
   right: 0;
 }
 
+#refreshResume {
+  margin: 2em;
+  position: fixed;
+  bottom: 5em;
+  right: 0;
+}
+
 .paper {
   width: var(--a4-w);
   height: var(--a4-h);

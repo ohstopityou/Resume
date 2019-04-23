@@ -23,6 +23,13 @@ toggleEditorButton.addEventListener('click', event => {
   editorPanel.style.display = (editorPanel.style.display === 'none' ? 'block' : 'none')
 })
 
+const refreshResumeButton = document.getElementById('refreshResume')
+const resumeIframe = document.getElementById('resumeIframe')
+refreshResumeButton.addEventListener('click', event => {
+  console.log('reloading iframe')
+  resumeIframe.contentWindow.location.reload()
+})
+
 const supportForm = document.getElementById('resumeForm')
 supportForm.addEventListener('submit', event => {
   event.preventDefault()
@@ -35,6 +42,8 @@ supportForm.addEventListener('submit', event => {
     body: formToJSONString(event.target)
   })
     .then(validateResponse)
+    // Refreshes resume iframe
+    .then(resumeIframe.contentWindow.location.reload())
     .catch(logError)
 })
 

@@ -47,15 +47,16 @@
           <label>To<input name="edu-to" type="date"></label>
           <label>Summary<textarea name="edu-summary" rows="8"><%= edu.summary ? edu.summary : '' %></textarea></label>
         </div>
-        <button id="saveBtn">Save</button>
+        <button>Save</button>
         </form>
       </div>
 
     </section>
     <section id="preview">
       <div id="preview-inner">
-        <iframe src="//localhost:8080/resume/<%= id ? id : '' %>" class="paper"></iframe> 
+        <iframe id="resumeIframe" src="//localhost:8080/resume/<%= id ? id : '' %>" class="paper"></iframe> 
       </div>
+      <button id="refreshResume">Refresh resume</button>
       <button id="toggleEditor">Toggle editor</button>
     </section>
   </main>

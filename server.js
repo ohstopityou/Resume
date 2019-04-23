@@ -114,8 +114,7 @@ app.route('/resume/:id')
   .put(async (req, res) => {
     let db
     let r = req.body
-    console.log(r.name)
-    console.log(req.params.id)
+
     try {
       db = await mysql.createConnection(sqlConfig)
       let result = await db.execute(`
@@ -129,7 +128,6 @@ app.route('/resume/:id')
       city = '${r.city}',
       postcode = ${r.postcode}
       WHERE id = ${req.params.id}`)
-
     } catch (err) {
       console.log('Some Error: ' + err)
       // Not found, redirect to login
@@ -137,8 +135,8 @@ app.route('/resume/:id')
     } finally {
       // Close connection
       if (db) { db.end() }
+      res.send('Update OK')
     }
-    // Update a resume
   })
   .delete((req, res) => {
     // Delete a resume

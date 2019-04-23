@@ -1,4 +1,6 @@
 body {
     height: 100vh;
     background-image: linear-gradient(to top right,  red, #f06d06);
+    display: grid;
+    place-items: center;
 }
