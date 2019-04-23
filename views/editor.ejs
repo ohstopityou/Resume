@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../public/css/main.css">
+    <title>Resume Builder</title>
+</head>
+<body>
+  <header>
+    <h1>Resume Builder</h1>
+    <p><%= resume.name ? resume.name : 'Log In' %></p>
+  </header>
+  <main>
+    <section id="editor">
+      <div class="inner">
+        <form autocomplete="off" id="resumeForm">
+        <h2>Personal Info</h2>
+        <div>
+          <label>Name<input name="name" value="<%= resume.name ? resume.name : '' %>"></label>
+          <label>Picture<input name="picture" type="file"></label>
+          <label>Title<input name="title" value="<%= resume.worktitle ? resume.worktitle : '' %>"></label>
+          <label>Email<input name="email" type="email" value="<%= resume.email ? resume.email : '' %>"></label>
+          <label>Phone<input name="phone" type="tel" value="<%= resume.phone ? resume.phone : '' %>"></label>
+          <label>Address<input name="address" value="<%= resume.address ? resume.address : '' %>"></label>
+          <label>City<input name="city" value="<%= resume.city ? resume.city : '' %>"></label>
+          <label>Post code<input name="postcode" value="<%= resume.postcode ? resume.postcode : '' %>"></label>
+          <label>Summary<textarea name="summary" rows="8"><%= resume.summary ? resume.summary : '' %></textarea></label>
+        </div>
+        
+        <h2>Experience</h2>
+        <div>
+          <label>Title<input name="exp-title" value="<%= exp.title ? exp.title : '' %>"></label>
+          <label>Location<input name="exp-location" value="<%= exp.location ? exp.location : '' %>"></label>
+          <label>From<input name="exp-from" type="date"></label>
+          <label>To<input name="exp-to" type="date"></label>
+          <label>Summary<textarea name="exp-summary" rows="8"><%= exp.summary ? exp.summary : '' %></textarea></label>
+        </div>
+        
+        <h2>Education</h2>
+        <div>
+          <label>Title<input name="edu-title" value="<%= edu.title ? edu.title : '' %>"></label>
+          <label>Location<input name="edu-location" value="<%= edu.location ? edu.location : '' %>"></label>
+          <label>From<input name="edu-from" type="date"></label>
+          <label>To<input name="edu-to" type="date"></label>
+          <label>Summary<textarea name="edu-summary" rows="8"><%= edu.summary ? edu.summary : '' %></textarea></label>
+        </div>
+        <button id="saveBtn">Save</button>
+        </form>
+      </div>
+
+    </section>
+    <section id="preview">
+      <div id="preview-inner">
+        <iframe src="//localhost:8080/resume/<%= id ? id : '' %>" class="paper"></iframe> 
+      </div>
+      <button id="toggleEditor">Toggle editor</button>
+    </section>
+  </main>
+</body>
+<script src="../js/main.js"></script>
+</html>
