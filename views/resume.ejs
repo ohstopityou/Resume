@@ -9,48 +9,39 @@
   </head>
   <body>
       <aside>
-       <img src="" alt="profile picture" id="picture">
+       <!-- <img src="" alt="profile picture" id="picture"> -->
         <section id="contact-info">
           <h3>Contact Info</h3>
           <ul>
-            <li id="email"></li>
-            <li id="phone"></li>
-            <li id="address"></li>
-            <li><span id="post-code"></span> <span id="city"></span></li>
+            <li id="email"><%= resume.email ? resume.email : '' %></li>
+            <li id="phone"><%= resume.phone ? resume.phone : '' %></li>
+            <li id="address"><%= resume.address ? resume.address : '' %></li>
+            <li><span id="postcode"><%= resume.postcode ? resume.postcode : '' %></span> <span id="city"><%= resume.city ? resume.city : '' %></span></li>
           </ul>  
         </section>
  
       </aside>
       <div class="content">
         <header>
-          <h1 id="name" class="capitalize"><%= name %></h1>
-          <h2 id="work-title"></h2>
-          <p id="about" class="summary"></p>
+          <h1 id="name" class="capitalize"><%= resume.name ? resume.name : 'Thanos' %></h1>
+          <h2 id="work-title"> <%= resume.worktitle ? resume.worktitle : 'Balancer' %> </h2>
+          <p id="about" class="summary"></p> <%= resume.summary ? resume.summary : 'I did nothing wrong' %> </p>
         </header>
         <section id="experience">
           <h3>Experience</h3>
           <div class="wrapper">
-            <p class="duration"><time></time> - <time></time></p>
-            <h4><span class="title"></span> - <span class="origin"></span></h4>
-            <p class="summary"></p>
+            <p class="duration"><time><%= exp.from ? exp.from.getFullYear() : '?' %></time> - <time><%= exp.to ? exp.to.getFullYear() : 'current' %></time></p>
+            <h4><span class="title"><%= exp.title ? exp.title : '' %></span> - <span class="origin"><%= exp.location ? exp.location : '' %></span></h4>
+            <p class="summary"><%= exp.summary ? exp.summary : '' %></p>
           </div>
         </section>
         <section id="education">
           <h3>Education</h3>
           <div class="wrapper">
-            <p class="duration"><time></time> - <time></time></p>
-            <h4><span class="title"></span> - <span class="origin"></span></h4>
-            <p class="summary"></p>
+            <p class="duration"><time><%= edu.from ? edu.from.getFullYear() : '?' %></time> - <time><%= edu.to ? edu.to.getFullYear() : 'current' %></time></p>
+            <h4><span class="title"><%= edu.title ? edu.title : '' %></span> - <span class="origin"><%= edu.location ? edu.location : '' %></span></h4>
+            <p class="summary"><%= edu.summary ? edu.summary : '' %></p>
           </div>
-          
-<!--
-          <div class="wrapper">
-            <p class="duration"><time></time> - <time></time></p>
-            <h4><span class="title"></span> - <span class="origin"></span></h4>
-            <p class="summary"></p>
-          </div>
--->
-          
         </section>
       </div>
   </body>

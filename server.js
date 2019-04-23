@@ -45,23 +45,38 @@ app.route('/login')
 
 app.route('/resume/:id')
   .get(async (req, res, next) => {
-    // connect to db
-    // get resume where id = req.params.id
     let db
     try {
       db = await mysql.createConnection(sqlConfig)
-      const [sum, fields] = await db.execute(`INSERT INTO fbcritics (name) VALUES ('${name}')`)
-      const sumAsString = sum.pop().value.toString()
-      res.send(sumAsString)
+      let resume = await db.execute(`
+      SELECT * FROM users
+      INNER JOIN resumes ON users.resume = resumes.id
+      WHERE resumes.id = ${req.params.id}`)
+      resume = resume[0][0]
+
+      let experience = await db.execute(`
+      SELECT * FROM experiences
+      WHERE resume = ${req.params.id}`)
+      experience = experience[0][0]
+
+      let education = await db.execute(`
+      SELECT * FROM education
+      WHERE resume = ${req.params.id}`)
+      education = education[0][0]
+      console.log(education.from.toDateString())
+
+      if (resume) {
+        res.render('resume', { resume: resume, edu: education, exp: experience })
+      } else {
+        throw Error('Resume not found')
+      }
     } catch (err) {
-      // Forward to error handler
-      next(err)
+      // Not found, redirect to login
+      res.sendFile(path.join(__dirname, '/views/login.html'))
     } finally {
       // Close connection
       if (db) { db.end() }
     }
-    // res.render('resume', dbresult)
-    res.render('resume')
   })
   .post((req, res) => {
     // Creates a new resume
