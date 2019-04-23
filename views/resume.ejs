@@ -1,0 +1,57 @@
+<html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="css/resume.css">
+      <link rel="stylesheet" href="../css/resume.css">
+      <link rel="stylesheet" href="../public/css/resume.css">
+      <title>Resume Preview</title>
+  </head>
+  <body>
+      <aside>
+       <img src="" alt="profile picture" id="picture">
+        <section id="contact-info">
+          <h3>Contact Info</h3>
+          <ul>
+            <li id="email"></li>
+            <li id="phone"></li>
+            <li id="address"></li>
+            <li><span id="post-code"></span> <span id="city"></span></li>
+          </ul>  
+        </section>
+ 
+      </aside>
+      <div class="content">
+        <header>
+          <h1 id="name" class="capitalize"><%= name %></h1>
+          <h2 id="work-title"></h2>
+          <p id="about" class="summary"></p>
+        </header>
+        <section id="experience">
+          <h3>Experience</h3>
+          <div class="wrapper">
+            <p class="duration"><time></time> - <time></time></p>
+            <h4><span class="title"></span> - <span class="origin"></span></h4>
+            <p class="summary"></p>
+          </div>
+        </section>
+        <section id="education">
+          <h3>Education</h3>
+          <div class="wrapper">
+            <p class="duration"><time></time> - <time></time></p>
+            <h4><span class="title"></span> - <span class="origin"></span></h4>
+            <p class="summary"></p>
+          </div>
+          
+<!--
+          <div class="wrapper">
+            <p class="duration"><time></time> - <time></time></p>
+            <h4><span class="title"></span> - <span class="origin"></span></h4>
+            <p class="summary"></p>
+          </div>
+-->
+          
+        </section>
+      </div>
+  </body>
+</html>
