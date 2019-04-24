@@ -3,4 +3,4 @@ module.exports = {
   user     : 'root',
   password : 'easypass',
   database : 'dk205_AfN19'
-};
+}

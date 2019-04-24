@@ -20,16 +20,12 @@ app.use(logger('dev'))
 app.use(bodyParser.json())
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '/views/editor.html'))
-})
-
-app.get('/edit/:id', (req, res) => {
-  res.sendFile(path.join(__dirname, '/views/resume.html'))
+  res.render('editor', { resume: '', edu: '', exp: '', id: 0 })
 })
 
 app.route('/login')
   .get((req, res) => {
-    res.sendFile(path.join(__dirname, '/views/login.html'))
+    res.render('error', { error: 'Login not created yet' })
   })
   .post((req, res) => {
     const username = req.body.username
@@ -69,7 +65,7 @@ app.route('/editor/:id')
       }
     } catch (err) {
       // Not found, redirect to login
-      res.sendFile(path.join(__dirname, '/views/login.html'))
+      res.render('error', { error: err })
     } finally {
       // Close connection
       if (db) { db.end() }
@@ -80,7 +76,9 @@ app.route('/resume/:id')
   .get(async (req, res, next) => {
     let db
     try {
+      console.log('Connecting to DB')
       db = await mysql.createConnection(sqlConfig)
+      console.log('DB connected')
       let resume = await db.execute(`
       SELECT * FROM users
       INNER JOIN resumes ON users.resume = resumes.id
@@ -104,7 +102,7 @@ app.route('/resume/:id')
       }
     } catch (err) {
       // Not found, redirect to login
-      res.sendFile(path.join(__dirname, '/views/login.html'))
+      res.render('error', { error: err })
     } finally {
       // Close connection
       if (db) { db.end() }
