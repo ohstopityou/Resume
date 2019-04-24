@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
-    "autostart": "nodemon server.js",
-    "watch": "sass --watch scss:public/css"
+    "start": "NODE_ENV=prod node server.js",
+    "autostart": "NODE_ENV=dev nodemon server.js",
+    "watch": "sass --watch scss:public/css",
+    "proxy": "sudo ./cloud_sql_proxy -instances=silicon-synapse-232018:europe-north1:dikult205=tcp:3306"
   },
   "repository": {
     "type": "git",

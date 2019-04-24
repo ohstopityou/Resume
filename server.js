@@ -84,11 +84,13 @@ app.route('/resume/:id')
       INNER JOIN resumes ON users.resume = resumes.id
       WHERE resumes.id = ${req.params.id}`)
       resume = resume[0][0]
+      console.log('resume found')
 
       let experience = await db.execute(`
       SELECT * FROM experiences
       WHERE resume = ${req.params.id}`)
       experience = experience[0][0]
+      console.log('experience found')
 
       let education = await db.execute(`
       SELECT * FROM education
@@ -117,6 +119,7 @@ app.route('/resume/:id')
 
     try {
       db = await mysql.createConnection(sqlConfig)
+      // Inner join
       let result = await db.execute(`
       UPDATE resumes
       SET 

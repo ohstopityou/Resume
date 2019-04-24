@@ -33,8 +33,9 @@ refreshResumeButton.addEventListener('click', event => {
 const supportForm = document.getElementById('resumeForm')
 supportForm.addEventListener('submit', event => {
   event.preventDefault()
-
-  fetch('http://localhost:8080/resume/1', {
+  console.log(resumeIframe.contentWindow.location)
+  // Update resume using put
+  fetch(resumeIframe.contentWindow.location, {
     method: 'PUT',
     headers: {
       'Content-type': 'application/json'
