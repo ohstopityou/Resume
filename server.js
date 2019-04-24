@@ -8,6 +8,8 @@ const bodyParser = require('body-parser')
 const mysql = require('mysql2/promise')
 const sqlConfig = require('./sqlconfig.js')
 
+const PORT = process.env.PORT || 8080
+
 // Makes files in public folder accessable
 const path = require('path')
 const publicFolder = path.join(__dirname, '/public')
@@ -142,6 +144,6 @@ app.route('/resume/:id')
     // Delete a resume
   })
 
-app.listen(8080, () => {
+app.listen(PORT, () => {
   console.log('App listening at http://localhost:8080')
 })
