@@ -1,6 +1,7 @@
 'use strict'
 
 const express = require('express')
+const session = require('express-session')
 const app = express()
 const logger = require('morgan')
 const bodyParser = require('body-parser')
@@ -17,31 +18,48 @@ app.use(express.static(publicFolder))
 
 app.set('view engine', 'ejs')
 app.use(logger('dev'))
+app.use(session({ secret: 'ssshhhhh', saveUninitialized: true, resave: true }))
 
 const formParser = bodyParser.urlencoded({ extended: false })
 
-app.get('/', (req, res) => {
-  res.render('welcome')
-})
+function verify (req) {
+  return req.session && req.session.name === 'admin'
+}
 
-app.post('/login', formParser, (req, res) => {
-  res.render('editor')
+// Redirects to welcome screen if not logged in
+const sessionChecker = (req, res, next) => {
+  if (verify(req)) {
+    next()
+  } else {
+    res.redirect('/login')
+  }
+}
+
+// Redirects to editor if logged in
+app.get('/', sessionChecker, (req, res) => {
+  res.redirect('/editor')
 })
 
 app.route('/login')
-  .post((req, res) => {
-    console.log(req)
-    const username = req.body.username
-    const password = req.body.password
-
-    // Any username and password lets you in ;)
-    if (username && password) {
-      res.sendFile(path.join(__dirname, '/views/editor.html'))
+  .get((req, res) => {
+    // Redirect to editor if logged in, else render login screen
+    verify(req) ? res.redirect('editor') : res.render('welcome')
+  })
+  .post(formParser, (req, res) => {
+    if (req.body.name === 'admin') {
+      req.session.name = 'admin'
+      res.redirect('/editor/1')
+    } else {
+      res.render('welcome', { error: 'wrong username or password' })
     }
   })
 
+app.get('/editor', (req, res) => {
+  res.redirect('/editor/1')
+})
+
 app.route('/editor/:id')
-  .get(async (req, res, next) => {
+  .get(sessionChecker, async (req, res, next) => {
     let db
     try {
       db = await mysql.createConnection(sqlConfig)
@@ -68,12 +86,17 @@ app.route('/editor/:id')
       }
     } catch (err) {
       // Not found, redirect to login
-      res.render('error', { error: err })
+      res.render('welcome', { error: err })
     } finally {
       // Close connection
       if (db) { db.end() }
     }
   })
+
+app.get('/logout', (req, res) => {
+  req.session.name = ''
+  res.redirect('/')
+})
 
 app.route('/resume/:id')
   .get(async (req, res, next) => {
@@ -149,9 +172,9 @@ app.route('/resume/:id')
   })
 
 app.all('*', (req, res) => {
-  res.render('welcome', { error: 'Not found' })
+  res.redirect('/')
 })
 
 app.listen(PORT, () => {
-  console.log('App listening at http://localhost:8080')
+  console.log(`App listening at http://localhost:${PORT}`)
 })
