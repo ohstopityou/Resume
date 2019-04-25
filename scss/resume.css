@@ -1,0 +1,146 @@
+html {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  font-size: 16px;
+  overflow: hidden;
+}
+
+*, *:before, *:after {
+  -webkit-box-sizing: inherit;
+          box-sizing: inherit;
+}
+
+html, body, h1, h2, h3, h4, h5, h6, p, ol, ul {
+  margin: 0;
+  padding: 0;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+html, body {
+  font-size: 16px;
+  width: 21cm;
+  height: 29.7cm;
+}
+
+/* Styling */
+body {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+#picture {
+  height: 10em;
+  width: 10em;
+  border-radius: 50%;
+  margin: 2em auto;
+}
+
+/* Main Section */
+.content {
+  width: 70%;
+  padding: 1em;
+}
+
+.wrapper {
+  margin: 1em 0;
+}
+
+/* Sidebar */
+aside {
+  width: 30%;
+  color: #fff;
+  background: #0af;
+}
+
+/* Text Styling */
+p, li {
+  font-family: sans-serif;
+}
+
+#name {
+  font-size: 2.5em;
+  color: #222;
+}
+
+#work-title {
+  color: #555;
+  margin-bottom: 1em;
+}
+
+.summary {
+  text-align: left;
+  color: #444;
+  line-height: 1.5;
+  font-weight: 300;
+  margin: 0.5em 0;
+}
+
+#address, #city, #name, #title {
+  text-transform: capitalize;
+}
+
+.duration {
+  text-transform: uppercase;
+  font-weight: 300;
+  margin-bottom: 3px;
+  font-size: 0.8em;
+}
+
+.title {
+  text-transform: capitalize;
+  font-weight: bold;
+}
+
+.origin {
+  font-style: italic;
+  font-weight: 300;
+}
+
+.content h3 {
+  color: #0af;
+  font-size: 1.5em;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+h4 {
+  font-size: 1.2em;
+}
+
+aside h3 {
+  background: rgba(0, 0, 0, 0.3);
+  padding-left: 1em;
+  line-height: 1.5em;
+}
+
+aside ul {
+  padding-left: 1em;
+}
+
+aside li {
+  margin: 0.5em 0;
+}
+
+/* Print */
+@page {
+  size: A4;
+  margin: 0;
+}
+
+@media print {
+  html {
+    margin: 0;
+    padding: 0;
+  }
+}
+/*# sourceMappingURL=resume.css.map */

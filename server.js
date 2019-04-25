@@ -17,17 +17,20 @@ app.use(express.static(publicFolder))
 
 app.set('view engine', 'ejs')
 app.use(logger('dev'))
-app.use(bodyParser.json())
+
+const formParser = bodyParser.urlencoded({ extended: false })
 
 app.get('/', (req, res) => {
-  res.render('editor', { resume: '', edu: '', exp: '', id: 0 })
+  res.render('welcome')
+})
+
+app.post('/login', formParser, (req, res) => {
+  res.render('editor')
 })
 
 app.route('/login')
-  .get((req, res) => {
-    res.render('error', { error: 'Login not created yet' })
-  })
   .post((req, res) => {
+    console.log(req)
     const username = req.body.username
     const password = req.body.password
 
@@ -144,6 +147,10 @@ app.route('/resume/:id')
   .delete((req, res) => {
     // Delete a resume
   })
+
+app.all('*', (req, res) => {
+  res.render('welcome', { error: 'Not found' })
+})
 
 app.listen(PORT, () => {
   console.log('App listening at http://localhost:8080')
