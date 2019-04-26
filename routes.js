@@ -6,12 +6,12 @@ const formParser = require('body-parser').urlencoded({ extended: false })
 const mysql = require('mysql2/promise')
 const sqlConfig = require('./sqlconfig.js')
 
-// Redirects to login screen if not logged in
+// Redirects to login screen if no active session
 const requireLogin = (req, res, next) => {
-  if (req.session && req.session.resumeid)) {
-    next()
-  } else {
+  if (!req.session.populated)) {
     res.render('login')
+  } else {
+    next()
   }
 }
 
