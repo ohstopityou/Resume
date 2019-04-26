@@ -42,7 +42,7 @@ router.route('/login')
       }
     } catch (err) {
       // Not found, redirect to login
-      res.render('welcome', { error: err })
+      res.render('login', { error: err })
     } finally {
       // Close connection
       if (db) { db.end() }
@@ -77,7 +77,7 @@ router.get('/editor', requireLogin, async (req, res) => {
     }
   } catch (err) {
     // Not found, redirect to login
-    res.render('welcome', { error: err })
+    res.render('login', { error: err })
   } finally {
     // Close connection
     if (db) { db.end() }
