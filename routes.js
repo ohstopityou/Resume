@@ -6,28 +6,24 @@ const formParser = require('body-parser').urlencoded({ extended: false })
 const mysql = require('mysql2/promise')
 const sqlConfig = require('./sqlconfig.js')
 
-function verify (req) {
-  return req.session && req.session.resumeid
-}
-
-// Redirects to welcome screen if not logged in
-const sessionChecker = (req, res, next) => {
-  if (verify(req)) {
+// Redirects to login screen if not logged in
+const requireLogin = (req, res, next) => {
+  if (req.session && req.session.resumeid)) {
     next()
   } else {
-    res.redirect('/login')
+    res.render('login')
   }
 }
 
 // Redirects to editor if logged in
-router.get('/', sessionChecker, (req, res) => {
+router.get('/', requireLogin, (req, res) => {
   res.redirect('/editor')
 })
 
 router.route('/login')
-  .get((req, res) => {
+  .get(requireLogin, (req, res) => {
     // Redirect to editor if logged in, else render login screen
-    verify(req) ? res.redirect('editor') : res.render('welcome')
+    res.redirect('editor')
   })
   .post(formParser, async (req, res) => {
     let db
@@ -51,16 +47,9 @@ router.route('/login')
       // Close connection
       if (db) { db.end() }
     }
-
-    // if (req.body.name === 'admin') {
-    //   req.session.name = 'admin'
-    //   res.redirect('/editor/1')
-    // } else {
-    //   res.render('welcome', { error: 'wrong username or password' })
-    // }
   })
 
-router.get('/editor', sessionChecker, async (req, res) => {
+router.get('/editor', requireLogin, async (req, res) => {
   let db
   const resumeid = req.session.resumeid
   try {
@@ -98,12 +87,12 @@ router.get('/editor', sessionChecker, async (req, res) => {
 router.get('/logout', (req, res) => {
   const name = req.session.username
   req.session = null
-  res.redirect('/welcome', `Goodybye ${name}`)
+  res.render('login', {error: `Goodybye ${name}`})
 })
 
 // TODO : Anyone can view any resume as long as they are logged in?
 router.route('/resume/:id')
-  .get(sessionChecker, async (req, res, next) => {
+  .get(requireLogin, async (req, res) => {
     let db
     try {
       console.log('Connecting to DB')
@@ -144,7 +133,7 @@ router.route('/resume/:id')
   .post((req, res) => {
     // Creates a new resume
   })
-  .put(async (req, res) => {
+  .put(requireLogin, async (req, res) => {
     let db
     let r = req.body
 
