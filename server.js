@@ -18,7 +18,9 @@ app.use(express.static(publicFolder))
 
 app.set('view engine', 'ejs')
 app.use(logger('dev'))
-app.use(session({ name: 'session', keys: ['username', 'resumeid'] }))
+
+// Saves session data to the cookie sent with the clients.
+app.use(session({ name: 'session', secret: 'deeznuts' }))
 
 app.use('/', routes)
 
