@@ -171,7 +171,7 @@ router.route('/resume')
         WHERE resume = ${resumeid}`)
         experience = experience[0][0]
       } catch {
-        experience = ''
+        throw Error('Experience not found')
       }
   
       // Add education if exists
@@ -182,7 +182,7 @@ router.route('/resume')
         WHERE resume = ${resumeid}`)
         education = education[0][0]
       } catch {
-        education = ''
+        throw Error('Education not found')
       }
 
       if (resume) {
