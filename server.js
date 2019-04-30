@@ -3,8 +3,6 @@
 const express = require('express')
 const session = require('cookie-session')
 
-// TODO: uninstall express-session cookie-parser, npm install --save cookie-session
-
 const app = express()
 const logger = require('morgan')
 const routes = require('./routes')
@@ -20,7 +18,7 @@ app.set('view engine', 'ejs')
 app.use(logger('dev'))
 
 // Saves session data to the cookie sent with the clients.
-app.use(session({ name: 'session', secret: 'deeznuts' }))
+app.use(session({ name: 'session', secret: 'supersecret' }))
 
 app.use('/', routes)
 

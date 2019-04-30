@@ -20,7 +20,7 @@
         <h2>Personal Info</h2>
         <div>
           <label>Name<input name="name" value="<%= resume.name ? resume.name : '' %>"></label>
-          <label>Picture<input name="picture" type="file"></label>
+          <label>Picture URL<input name="picture" value="<%= resume.picture ? resume.picture : '' %>"></label>
           <label>Title<input name="title" value="<%= resume.worktitle ? resume.worktitle : '' %>"></label>
           <label>Email<input name="email" type="email" value="<%= resume.email ? resume.email : '' %>"></label>
           <label>Phone<input name="phone" type="tel" value="<%= resume.phone ? resume.phone : '' %>"></label>
@@ -34,8 +34,8 @@
         <div>
           <label>Title<input name="exp-title" value="<%= exp ? exp.title : '' %>"></label>
           <label>Location<input name="exp-location" value="<%= exp ? exp.location : '' %>"></label>
-          <label>From<input name="exp-from"></label>
-          <label>To<input name="exp-to"></label>
+          <label>From<input name="exp-from" value="<%= exp ? exp.from : '' %>"></label>
+          <label>To<input name="exp-to" value="<%= exp ? exp.to : '' %>"></label>
           <label>Summary<textarea name="exp-summary" rows="8"><%= exp ? exp.summary : '' %></textarea></label>
         </div>
         
@@ -43,8 +43,8 @@
         <div>
           <label>Title<input name="edu-title" value="<%= edu ? edu.title : '' %>"></label>
           <label>Location<input name="edu-location" value="<%= edu ? edu.location : '' %>"></label>
-          <label>From<input name="edu-from"></label>
-          <label>To<input name="edu-to"></label>
+          <label>From<input name="edu-from" value="<%= edu ? edu.from : '' %>"></label>
+          <label>To<input name="edu-to" value="<%= edu ? edu.to : '' %>"></label>
           <label>Summary<textarea name="edu-summary" rows="8"><%= edu ? edu.summary : '' %></textarea></label>
         </div>
         <button>Save</button>

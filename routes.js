@@ -25,6 +25,10 @@ router.route('/signup')
   .post(formParser, async (req, res) => {
     let db
     try {
+      if ( !req.body.email || !req.body.password ) {
+        throw Error('Missing username or password')
+      }
+
       db = await mysql.createConnection(sqlConfig)
       let result = await db.execute(`
       SELECT resume
@@ -82,10 +86,10 @@ router.route('/login')
       SELECT resume
       FROM users
       WHERE email = '${req.body.email}' AND password = '${req.body.password}'`)
-      const resumeid = result[0][0]['resume']
-      if (resumeid) {
+      const resume = result[0][0]
+      if (resume) {
         console.log('Logged in successfully')
-        req.session.resumeid = resumeid
+        req.session.resumeid = resume['resume']
         res.redirect(`/editor`)
       } else {
         throw Error('Wrong username or password')
@@ -191,9 +195,8 @@ router.route('/resume')
         throw Error('Resume not found')
       }
     } catch (err) {
-      console.log('resume rendering error')
       // Not found, redirect to login
-      res.render('error', { error: err })
+      res.render('login', { error: 'Could not get all required data: ' + err })
     } finally {
       // Close connection
       if (db) { db.end() }
@@ -207,13 +210,14 @@ router.route('/resume')
 
     try {
       db = await mysql.createConnection(sqlConfig)
-      // Inner join
+      // Send update to server
       await db.execute(`
       UPDATE resumes
       LEFT JOIN experiences ON experiences.resume = resumes.id
       LEFT JOIN education ON education.resume = resumes.id
       SET 
       resumes.name = '${r.name}',
+      resumes.picture = '${r.picture}',
       resumes.summary = '${r.summary}',
       resumes.worktitle = '${r.title}',
       resumes.phone = ${r.phone},

@@ -1,9 +1,8 @@
 body {
-  height: 100vh;
-  background-image: -webkit-gradient(linear, left bottom, right top, from(red), to(#f06d06));
-  background-image: linear-gradient(to top right, red, #f06d06);
-  display: -ms-grid;
+  height: 100%;
+  background-image: linear-gradient(to top right, blue, red);
   display: grid;
   place-items: center;
 }
+
 /*# sourceMappingURL=login.css.map */
