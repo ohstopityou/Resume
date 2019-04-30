@@ -2,13 +2,14 @@
 
 const router = require('express').Router()
 const formParser = require('body-parser').urlencoded({ extended: false })
+const jsonParser = require('body-parser').json()
 
 const mysql = require('mysql2/promise')
 const sqlConfig = require('./sqlconfig.js')
 
 // Redirects to login screen if no active session
 const requireLogin = (req, res, next) => {
-  if (!req.session.populated)) {
+  if (!req.session.populated) {
     res.render('login')
   } else {
     next()
@@ -20,6 +21,54 @@ router.get('/', requireLogin, (req, res) => {
   res.redirect('/editor')
 })
 
+router.route('/signup')
+  .post(formParser, async (req, res) => {
+    let db
+    try {
+      db = await mysql.createConnection(sqlConfig)
+      let result = await db.execute(`
+      SELECT resume
+      FROM users
+      WHERE email = '${req.body.email}'`)
+      let resume = result[0][0]
+      if (!resume) {
+        // Resume does not exist, creating new resume
+        let result = await db.execute(`
+        INSERT INTO resumes ()
+        VALUES ();`)
+
+        // Save resume to session
+        let resumeid = result[0]['insertId']
+        req.session.resumeid = resumeid
+
+        await db.execute(`
+        INSERT INTO experiences (resume)
+        VALUES (${resumeid});`)
+
+        await db.execute(`
+        INSERT INTO education (resume)
+        VALUES (${resumeid});`)
+      
+
+        // Create new user for resume
+        await db.execute(`
+        INSERT INTO users (email, password, resume)
+        VALUES ('${req.body.email}', '${req.body.password}', ${resumeid});`)
+
+        res.redirect('editor')
+
+      } else {
+        throw Error('User already exists')
+      }
+    } catch (err) {
+      // Not found, redirect to login
+      res.render('login', { error: err })
+    } finally {
+      // Close connection
+      if (db) { db.end() }
+    }
+  })
+
 router.route('/login')
   .get(requireLogin, (req, res) => {
     // Redirect to editor if logged in, else render login screen
@@ -30,11 +79,12 @@ router.route('/login')
     try {
       db = await mysql.createConnection(sqlConfig)
       const result = await db.execute(`
-      SELECT resume 
+      SELECT resume
       FROM users
       WHERE email = '${req.body.email}' AND password = '${req.body.password}'`)
       const resumeid = result[0][0]['resume']
       if (resumeid) {
+        console.log('Logged in successfully')
         req.session.resumeid = resumeid
         res.redirect(`/editor`)
       } else {
@@ -60,15 +110,27 @@ router.get('/editor', requireLogin, async (req, res) => {
     WHERE resumes.id = ${resumeid}`)
     resume = resume[0][0]
 
-    let experience = await db.execute(`
-    SELECT * FROM experiences
-    WHERE resume = ${req.params.id}`)
-    experience = experience[0][0]
+    // Add experience if exists
+    let experience
+    try {
+      experience = await db.execute(`
+      SELECT * FROM experiences
+      WHERE resume = ${resumeid}`)
+      experience = experience[0][0]
+    } catch {
+      experience = ''
+    }
 
-    let education = await db.execute(`
-    SELECT * FROM education
-    WHERE resume = ${resumeid}`)
-    education = education[0][0]
+    // Add education if exists
+    let education
+    try {
+      education = await db.execute(`
+      SELECT * FROM education
+      WHERE resume = ${resumeid}`)
+      education = education[0][0]
+    } catch {
+      education = ''
+    }
 
     if (resume) {
       res.render('editor', { resume: resume, edu: education, exp: experience, id: resumeid })
@@ -85,36 +147,43 @@ router.get('/editor', requireLogin, async (req, res) => {
 })
 
 router.get('/logout', (req, res) => {
-  const name = req.session.username
   req.session = null
-  res.render('login', {error: `Goodybye ${name}`})
+  res.redirect('login')
 })
 
-// TODO : Anyone can view any resume as long as they are logged in?
-router.route('/resume/:id')
+router.route('/resume')
   .get(requireLogin, async (req, res) => {
     let db
+    const resumeid = req.session.resumeid
     try {
-      console.log('Connecting to DB')
       db = await mysql.createConnection(sqlConfig)
-      console.log('DB connected')
       let resume = await db.execute(`
       SELECT * FROM users
       INNER JOIN resumes ON users.resume = resumes.id
-      WHERE resumes.id = ${req.params.id}`)
+      WHERE resumes.id = ${resumeid}`)
       resume = resume[0][0]
-      console.log('resume found')
-
-      let experience = await db.execute(`
-      SELECT * FROM experiences
-      WHERE resume = ${req.params.id}`)
-      experience = experience[0][0]
-      console.log('experience found')
-
-      let education = await db.execute(`
-      SELECT * FROM education
-      WHERE resume = ${req.params.id}`)
-      education = education[0][0]
+  
+      // Add experience if exists
+      let experience
+      try {
+        experience = await db.execute(`
+        SELECT * FROM experiences
+        WHERE resume = ${resumeid}`)
+        experience = experience[0][0]
+      } catch {
+        experience = ''
+      }
+  
+      // Add education if exists
+      let education
+      try {
+        education = await db.execute(`
+        SELECT * FROM education
+        WHERE resume = ${resumeid}`)
+        education = education[0][0]
+      } catch {
+        education = ''
+      }
 
       if (resume) {
         res.render('resume', { resume: resume, edu: education, exp: experience })
@@ -130,39 +199,47 @@ router.route('/resume/:id')
       if (db) { db.end() }
     }
   })
-  .post((req, res) => {
-    // Creates a new resume
-  })
-  .put(requireLogin, async (req, res) => {
+  .put(requireLogin, jsonParser, async (req, res) => {
     let db
     let r = req.body
+    r.phone = r.phone || 0;
+    r.postcode = r.postcode || 0;
 
     try {
       db = await mysql.createConnection(sqlConfig)
       // Inner join
-      let result = await db.execute(`
+      await db.execute(`
       UPDATE resumes
+      LEFT JOIN experiences ON experiences.resume = resumes.id
+      LEFT JOIN education ON education.resume = resumes.id
       SET 
-      name = '${r.name}',
-      summary = '${r.summary}',
-      worktitle = '${r.title}',
-      phone = ${r.phone},
-      address = '${r.address}',
-      city = '${r.city}',
-      postcode = ${r.postcode}
-      WHERE id = ${req.params.id}`)
+      resumes.name = '${r.name}',
+      resumes.summary = '${r.summary}',
+      resumes.worktitle = '${r.title}',
+      resumes.phone = ${r.phone},
+      resumes.address = '${r.address}',
+      resumes.city = '${r.city}',
+      resumes.postcode = ${r.postcode},
+      education.title = '${r['edu-title']}',
+      education.location = '${r['edu-location']}',
+      education.from = '${r['edu-from']}',
+      education.to = '${r['edu-to']}',
+      education.summary = '${r['edu-summary']}',
+      experiences.title = '${r['exp-title']}',
+      experiences.location = '${r['exp-location']}',
+      experiences.from = '${r['exp-from']}',
+      experiences.to = '${r['exp-to']}',
+      experiences.summary = '${r['exp-summary']}'
+      WHERE resumes.id = ${req.session.resumeid}`)
     } catch (err) {
       console.log('Some Error: ' + err)
       // Not found, redirect to login
-      res.sendFile(path.join(__dirname, '/views/login.html'))
+      res.send('Update not OK')
     } finally {
       // Close connection
       if (db) { db.end() }
       res.send('Update OK')
     }
-  })
-  .delete((req, res) => {
-    // Delete a resume
   })
 
 router.all('*', (req, res) => {
