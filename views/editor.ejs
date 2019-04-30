@@ -32,20 +32,20 @@
         
         <h2>Experience</h2>
         <div>
-          <label>Title<input name="exp-title" value="<%= exp.title ? exp.title : '' %>"></label>
-          <label>Location<input name="exp-location" value="<%= exp.location ? exp.location : '' %>"></label>
-          <label>From<input name="exp-from" type="date"></label>
-          <label>To<input name="exp-to" type="date"></label>
-          <label>Summary<textarea name="exp-summary" rows="8"><%= exp.summary ? exp.summary : '' %></textarea></label>
+          <label>Title<input name="exp-title" value="<%= exp ? exp.title : '' %>"></label>
+          <label>Location<input name="exp-location" value="<%= exp ? exp.location : '' %>"></label>
+          <label>From<input name="exp-from"></label>
+          <label>To<input name="exp-to"></label>
+          <label>Summary<textarea name="exp-summary" rows="8"><%= exp ? exp.summary : '' %></textarea></label>
         </div>
         
         <h2>Education</h2>
         <div>
-          <label>Title<input name="edu-title" value="<%= edu.title ? edu.title : '' %>"></label>
-          <label>Location<input name="edu-location" value="<%= edu.location ? edu.location : '' %>"></label>
-          <label>From<input name="edu-from" type="date"></label>
-          <label>To<input name="edu-to" type="date"></label>
-          <label>Summary<textarea name="edu-summary" rows="8"><%= edu.summary ? edu.summary : '' %></textarea></label>
+          <label>Title<input name="edu-title" value="<%= edu ? edu.title : '' %>"></label>
+          <label>Location<input name="edu-location" value="<%= edu ? edu.location : '' %>"></label>
+          <label>From<input name="edu-from"></label>
+          <label>To<input name="edu-to"></label>
+          <label>Summary<textarea name="edu-summary" rows="8"><%= edu ? edu.summary : '' %></textarea></label>
         </div>
         <button>Save</button>
         </form>
@@ -54,7 +54,7 @@
     </section>
     <section id="preview">
       <div id="preview-inner">
-        <iframe id="resumeIframe" src="../resume/<%= id ? id : 3 %>" class="paper"></iframe> 
+        <iframe id="resumeIframe" src="/resume" class="paper"></iframe> 
       </div>
       <button id="refreshResume">Refresh resume</button>
       <button id="toggleEditor">Toggle editor</button>
