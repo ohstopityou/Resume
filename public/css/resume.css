@@ -35,6 +35,8 @@ body {
 }
 
 #picture {
+  object-fit: cover;
+  object-position: 100% 0;
   height: 10em;
   width: 10em;
   border-radius: 50%;
