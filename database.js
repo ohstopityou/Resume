@@ -36,8 +36,8 @@ module.exports = class database {
   }
 
   // TODO: change to only select ids
-  async getResumesFromUser (userid) {
-    const query = `SELECT * FROM resumes WHERE user_id = ?`
+  async getResumeIdsFromUser (userid) {
+    const query = `SELECT id FROM resumes WHERE user_id = ?`
     const [rows, fields] = await this.db.execute(query, [userid])
     return rows
   }
@@ -58,6 +58,33 @@ module.exports = class database {
     const query = `SELECT * FROM experiences WHERE resume_id = ?`
     const [rows, fields] = await this.db.execute(query, [resumeid])
     return rows
+  }
+
+  updateResume (resume) {
+    const query = `
+    UPDATE resumes
+    SET worktitle = ?,
+    summary = ?,
+    picture = ?
+    name = ?
+    email = ?
+    phone = ?
+    address = ?
+    postcode = ?
+    city = ?
+    WHERE id = ?`
+    this.db.execute(query,
+      [
+        resume.worktitle,
+        resume.summary,
+        resume.picture,
+        resume.name,
+        resume.email,
+        resume.phone,
+        resume.address,
+        resume.postcode,
+        resume.city
+      ]).then(console.log('Updated resume'))
   }
 
   async deleteExperience (experienceid) {
