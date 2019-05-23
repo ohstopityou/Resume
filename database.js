@@ -12,18 +12,14 @@ module.exports = class database {
   async newUser (email, password) {
     // bcrypt hashes password pre insertion
     const hash = bcrypt.hashSync(password, 10)
-    const [rows, fields] = await this.db.execute(
-      'INSERT INTO users (email, password) VALUES (?, ?)',
-      [email, hash]
-    )
+    const query = `INSERT INTO users (email, password) VALUES (?, ?)`
+    const [rows, fields] = await this.db.execute(query, [email, hash])
     return rows.insertId
   }
 
   async getUser (email) {
-    const [rows, fields] = await this.db.execute(
-      'SELECT * FROM users WHERE email = ?',
-      [email]
-    )
+    const query = `SELECT * FROM users WHERE email = ?`
+    const [rows, fields] = await this.db.execute(query, [email])
     return rows[0]
   }
 
@@ -34,44 +30,33 @@ module.exports = class database {
 
   // Creates a new resume, returns resume Id
   async newResume (userid) {
-    // Resume does not exist, creating new resume
-    const [rows, fields] = await this.db.execute(
-      'INSERT INTO resumes (user_id) VALUES (?)',
-      [userid]
-    )
+    const query = `INSERT INTO resumes (user_id) VALUES (?)`
+    const [rows, fields] = await this.db.execute(query, [userid])
     return rows.insertId
   }
 
+  // TODO: change to only select ids
   async getResumesFromUser (userid) {
-    const [rows, fields] = await this.db.execute(
-      'SELECT * FROM resumes WHERE user_id = ?',
-      [userid]
-    )
+    const query = `SELECT * FROM resumes WHERE user_id = ?`
+    const [rows, fields] = await this.db.execute(query, [userid])
     return rows
   }
 
   async getResume (resumeid) {
-    const [rows, fields] = await this.db.execute(
-      'SELECT * FROM resumes WHERE id = ?',
-      [resumeid]
-    )
+    const query = `SELECT * FROM resumes WHERE id = ?`
+    const [rows, fields] = await this.db.execute(query, [resumeid])
     return rows
   }
 
   async newExperience (resumeid) {
-    let db = await mysql.createConnection(sqlConfig)
-    const [rows, fields] = await db.execute(
-      'INSERT INTO experiences (resume_id) VALUES (?)',
-      [resumeid]
-    )
+    const query = `INSERT INTO experiences (resume_id) VALUES (?)`
+    const [rows, fields] = await this.db.execute(query, [resumeid])
     return rows.insertId
   }
 
   async getExperiences (resumeid) {
-    const [rows, fields] = await this.db.execute(
-      'SELECT * FROM experiences WHERE resume_id = ?',
-      [resumeid]
-    )
+    const query = `SELECT * FROM experiences WHERE resume_id = ?`
+    const [rows, fields] = await this.db.execute(query, [resumeid])
     return rows
   }
 
