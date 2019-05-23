@@ -11,7 +11,7 @@ db.connect()
 
 // Checks if session exists, else redirects to login
 const requireLogin = (req, res, next) => {
-  req.session.populated ? next() : res.redirect('login')
+  req.session.populated ? next() : res.render('login')
 }
 
 // Ignores requests to favicon
@@ -20,6 +20,14 @@ router.get('/favicon.ico', (req, res) => res.sendStatus(204))
 // Redirects to editor if logged in
 router.get('/', requireLogin, (req, res) => {
   res.redirect('/login')
+})
+
+
+router.get('/error', async (req, res, next) => {
+  
+  //throw Error('User already exists')
+  next('Errrrrrr')
+
 })
 
 router.get('/test', async (req, res) => {
@@ -39,82 +47,71 @@ router.get('/test', async (req, res) => {
 
 // Handles signup requests
 router.post('/signup', formParser, async (req, res) => {
-  try {
-    const email = req.body.email
-    const password = req.body.password
+  const email = req.body.email
+  const password = req.body.password
 
-    if ( !email || !password ) {
-      throw Error('Missing username or password')
-    }
-    
-    const user = await db.getUser(email)
-    if (user.length) {
-      throw Error('User already exists')
-    } else {
-      // Create new user, save to session
-      const userid = await db.newUser(email, password)
-      req.session.user = userid
-
-      // Create new resume, save to session
-      const resumeid = await db.newResume(userid)
-      req.session.resume = resumeid
-
-      res.redirect('editor')
-    }
-  } catch (err) {
-    res.render('login', { error: err })
+  if ( !email || !password ) {
+    next('Missing username or password')
   }
+  
+  const user = await db.getUser(email)
+  if (user.length) {
+    next('User already exists')
+  }
+
+  // Create new user, save to session
+  const userid = await db.newUser(email, password)
+  req.session.user = userid
+
+  // Create new resume, save to session
+  const resumeid = await db.newResume(userid)
+  req.session.resume = resumeid
+
+  res.redirect('editor')
 })
 
 router.route('/login')
   .get(requireLogin, (req, res) => {
-    // Redirect to editor if logged in, else render login screen
-    res.status(200).send('Logging in')
-    //res.redirect('editor')
+    res.redirect('editor')
   })
   .post(formParser, async (req, res) => {
-    try {
-      const email = req.body.email
-      const password = req.body.password
+    const email = req.body.email
+    const password = req.body.password
 
-      if ( !email || !password ) {
-        throw Error('Missing username or password')
-      }
-
-      const user = await db.getUser(email)
-      console.log(user)
-      console.log(password)
-      const correctPassword = await db.verifyUser(user, password)
-      if ( !correctPassword ) {
-        throw Error('Wrong username or password')
-      } else {
-        req.session.user = user.id
-      }
-      
-      res.redirect('editor')
-      
-    } catch (err) {
-      res.render('login', { error: err })
+    if ( !email || !password ) {
+      next('Missing username or password')
     }
+
+    const user = await db.getUser(email)
+    const correctPassword = await db.verifyUser(user, password)
+    if ( !correctPassword ) {
+      next('Wrong username or password')
+    }
+
+    // Save user to session
+    req.session.user = user.id
+    res.redirect('editor')
   })
 
-router.get('/editorr', async (req, res) => {
-  const resumeid = req.session.resume
-  try {
-    const resume = await db.getResume(resumeid)
-    const experiences = await db.getExperiences(resumeid)
+router.get('/editor', requireLogin, async (req, res, next) => {
+  let resumeid = req.session.resume
 
-    if (resume) {
-      res.render('editor', { resume: resume, exp: experiences })
-    } else {
-      throw Error('Resume not found')
-    }
-  } catch (err) {
-    console.log('Error found: ' + err)
-    // Not found, redirect to login
-    res.render('login', { error: err })
+  // If no resume is selected, choose the first one, then save to session
+  if (!resumeid){
+    const user_resumes = await db.getResumesFromUser(req.session.user)
+    resumeid = user_resumes[0].id
+    req.session.resume = resumeid
   }
-  console.log('Getting Editor Done!!')
+
+  const resume = await db.getResume(resumeid)
+  const experiences = await db.getExperiences(resumeid)
+
+  try {
+    res.render('editor', { resume: resume, experiences: experiences })
+  } catch (err) {
+    next('Could not load resume: ' + err)
+  }
+
 })
 
 router.get('/logout', (req, res) => {
@@ -215,6 +212,12 @@ router.route('/resume')
 
 router.all('*', (req, res) => {
   res.redirect('/')
+})
+
+// Error handler
+router.use((err, req, res, next) => {
+  console.log('Caught by the error gang: ' + err)
+  res.status(500).render('login', { error: err })
 })
 
 module.exports = router
