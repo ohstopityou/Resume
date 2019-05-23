@@ -2,7 +2,7 @@
 
 const router = require('express').Router()
 const formParser = require('body-parser').urlencoded({ extended: false })
-const jsonParser = require('body-parser').json()
+const multiformParser = require('multer')
 
 // Connect to database
 const Database = require('./database')
@@ -14,15 +14,17 @@ const requireLogin = (req, res, next) => {
   req.session.user ? next() : res.render('login')
 }
 
-// Checks if user has selected resume, else selects first
+// Checks if user has selected a resume, else selects the last made
 const requireResume = (req, res, next) => {
   if (!req.session.resume) {
-    console.log('No resume set. Selecting first one.')
-    db.getResumesFromUser(req.session.user).then(resume => {
-      req.session.resume = resume[0].id
+    console.log('No resume set. Selecting last one.')
+    db.getResumeIdsFromUser(req.session.user).then(resumes => {
+      req.session.resume = resumes.pop()
+      next()
     })
+  } else {
+    next()
   }
-  next()
 }
 
 // Ignores requests to favicon
@@ -33,13 +35,10 @@ router.get('/', requireLogin, (req, res) => {
   res.redirect('/login')
 })
 
-router.get('/error', async (req, res, next) => {
-  // throw Error('User already exists')
-  next('Errrrrrr')
-})
-
 router.get('/test', async (req, res) => {
-  req.session.resume = null
+  let resume = await db.getResume(50)
+  console.log(resume)
+  // req.session.resume = null
   // let tst = await db.getExperiences(1)
   // let tst = await db.loginUser('a', 'b')
   // let exists = await db.userExists('test@uib.no')
@@ -50,14 +49,12 @@ router.get('/test', async (req, res) => {
 })
 
 // Handles signup requests
-router.post('/signup', formParser, async (req, res) => {
+router.post('/signup', formParser, async (req, res, next) => {
   const email = req.body.email
   const password = req.body.password
-
-  if ( !email || !password ) {
+  if (!email || !password) {
     next('Missing username or password')
   }
-  
   const user = await db.getUser(email)
   if (user.length) {
     next('User already exists')
@@ -67,10 +64,9 @@ router.post('/signup', formParser, async (req, res) => {
   const userid = await db.newUser(email, password)
   req.session.user = userid
 
-  // Create new resume, save to session
+  // Create new resume, save to session, redirect
   const resumeid = await db.newResume(userid)
   req.session.resume = resumeid
-
   res.redirect('editor')
 })
 
@@ -100,7 +96,9 @@ router.route('/login')
 router.get('/editor', requireLogin, requireResume, async (req, res, next) => {
   // Load resume and experience, then render in the editor
   const resumeid = req.session.resume
+  console.log(resumeid)
   const resume = await db.getResume(resumeid)
+  
   const experiences = await db.getExperiences(resumeid)
   res.render('editor', { resume: resume, experiences: experiences })
 })
@@ -113,52 +111,15 @@ router.get('/logout', (req, res) => {
 router.route('/resume')
   .get(requireLogin, requireResume, async (req, res) => {
     const resumeid = req.session.resume
+    // TODO: query both together
     const resume = await db.getResume(resumeid)
     const experiences = await db.getExperiences(resumeid)
     res.render('resume', { resume: resume, experiences: experiences })
   })
-  .put(requireLogin, jsonParser, async (req, res) => {
-    let db
-    let r = req.body
-    r.phone = r.phone || 0;
-    r.postcode = r.postcode || 0;
-
-    try {
-      db = await mysql.createConnection(sqlConfig)
-      // Send update to server
-      await db.execute(`
-      UPDATE resumes
-      LEFT JOIN experiences ON experiences.resume = resumes.id
-      LEFT JOIN education ON education.resume = resumes.id
-      SET 
-      resumes.name = '${r.name}',
-      resumes.picture = '${r.picture}',
-      resumes.summary = '${r.summary}',
-      resumes.worktitle = '${r.title}',
-      resumes.phone = ${r.phone},
-      resumes.address = '${r.address}',
-      resumes.city = '${r.city}',
-      resumes.postcode = ${r.postcode},
-      education.title = '${r['edu-title']}',
-      education.location = '${r['edu-location']}',
-      education.from = '${r['edu-from']}',
-      education.to = '${r['edu-to']}',
-      education.summary = '${r['edu-summary']}',
-      experiences.title = '${r['exp-title']}',
-      experiences.location = '${r['exp-location']}',
-      experiences.from = '${r['exp-from']}',
-      experiences.to = '${r['exp-to']}',
-      experiences.summary = '${r['exp-summary']}'
-      WHERE resumes.id = ${req.session.resumeid}`)
-    } catch (err) {
-      console.log('Some Error: ' + err)
-      // Not found, redirect to login
-      res.send('Update not OK')
-    } finally {
-      // Close connection
-      if (db) { db.end() }
-      res.send('Update OK')
-    }
+  .put(requireLogin, requireResume, multiformParser, async (req, res) => {
+    console.log(req.body)
+    res.end()
+    // TODO
   })
 
 router.all('*', (req, res) => {
