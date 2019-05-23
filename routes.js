@@ -4,150 +4,117 @@ const router = require('express').Router()
 const formParser = require('body-parser').urlencoded({ extended: false })
 const jsonParser = require('body-parser').json()
 
-const mysql = require('mysql2/promise')
-const sqlConfig = require('./sqlconfig.js')
+// Connect to database
+const database = require('./database')
+const db = new database()
+db.connect()
 
-// Redirects to login screen if no active session
+// Checks if session exists, else redirects to login
 const requireLogin = (req, res, next) => {
-  if (!req.session.populated) {
-    res.render('login')
-  } else {
-    next()
-  }
+  req.session.populated ? next() : res.redirect('login')
 }
+
+// Ignores requests to favicon
+router.get('/favicon.ico', (req, res) => res.sendStatus(204))
 
 // Redirects to editor if logged in
 router.get('/', requireLogin, (req, res) => {
-  res.redirect('/editor')
+  res.redirect('/login')
 })
 
-router.route('/signup')
-  .post(formParser, async (req, res) => {
-    let db
-    try {
-      if ( !req.body.email || !req.body.password ) {
-        throw Error('Missing username or password')
-      }
+router.get('/test', async (req, res) => {
+  
+  let tst = await db.getExperiences(1)
+  //let tst = await db.loginUser('a', 'b')
+  //let exists = await db.userExists('test@uib.no')
+  //let userid = await db.newUser('testbro', 'dude')
+  //let resumeid = await db.newResume(userid)
+  if(exists) {
+    // Try to log in
+  } else {
+    // Create new user
+  }
+  res.end()
+})
 
-      db = await mysql.createConnection(sqlConfig)
-      let result = await db.execute(`
-      SELECT resume
-      FROM users
-      WHERE email = '${req.body.email}'`)
-      let resume = result[0][0]
-      if (!resume) {
-        // Resume does not exist, creating new resume
-        let result = await db.execute(`
-        INSERT INTO resumes ()
-        VALUES ();`)
+// Handles signup requests
+router.post('/signup', formParser, async (req, res) => {
+  try {
+    const email = req.body.email
+    const password = req.body.password
 
-        // Save resume to session
-        let resumeid = result[0]['insertId']
-        req.session.resumeid = resumeid
-
-        await db.execute(`
-        INSERT INTO experiences (resume)
-        VALUES (${resumeid});`)
-
-        await db.execute(`
-        INSERT INTO education (resume)
-        VALUES (${resumeid});`)
-      
-
-        // Create new user for resume
-        await db.execute(`
-        INSERT INTO users (email, password, resume)
-        VALUES ('${req.body.email}', '${req.body.password}', ${resumeid});`)
-
-        res.redirect('editor')
-
-      } else {
-        throw Error('User already exists')
-      }
-    } catch (err) {
-      // Not found, redirect to login
-      res.render('login', { error: err })
-    } finally {
-      // Close connection
-      if (db) { db.end() }
+    if ( !email || !password ) {
+      throw Error('Missing username or password')
     }
-  })
+    
+    const user = await db.getUser(email)
+    if (user.length) {
+      throw Error('User already exists')
+    } else {
+      // Create new user, save to session
+      const userid = await db.newUser(email, password)
+      req.session.user = userid
+
+      // Create new resume, save to session
+      const resumeid = await db.newResume(userid)
+      req.session.resume = resumeid
+
+      res.redirect('editor')
+    }
+  } catch (err) {
+    res.render('login', { error: err })
+  }
+})
 
 router.route('/login')
   .get(requireLogin, (req, res) => {
     // Redirect to editor if logged in, else render login screen
-    res.redirect('editor')
+    res.status(200).send('Logging in')
+    //res.redirect('editor')
   })
   .post(formParser, async (req, res) => {
-    let db
     try {
-      db = await mysql.createConnection(sqlConfig)
-      const result = await db.execute(`
-      SELECT resume
-      FROM users
-      WHERE email = '${req.body.email}' AND password = '${req.body.password}'`)
-      const resume = result[0][0]
-      if (resume) {
-        console.log('Logged in successfully')
-        req.session.resumeid = resume['resume']
-        res.redirect(`/editor`)
-      } else {
-        throw Error('Wrong username or password')
+      const email = req.body.email
+      const password = req.body.password
+
+      if ( !email || !password ) {
+        throw Error('Missing username or password')
       }
+
+      const user = await db.getUser(email)
+      console.log(user)
+      console.log(password)
+      const correctPassword = await db.verifyUser(user, password)
+      if ( !correctPassword ) {
+        throw Error('Wrong username or password')
+      } else {
+        req.session.user = user.id
+      }
+      
+      res.redirect('editor')
+      
     } catch (err) {
-      // Not found, redirect to login
       res.render('login', { error: err })
-    } finally {
-      // Close connection
-      if (db) { db.end() }
     }
   })
 
-router.get('/editor', requireLogin, async (req, res) => {
-  let db
-  const resumeid = req.session.resumeid
+router.get('/editorr', async (req, res) => {
+  const resumeid = req.session.resume
   try {
-    db = await mysql.createConnection(sqlConfig)
-    let resume = await db.execute(`
-    SELECT * FROM users
-    INNER JOIN resumes ON users.resume = resumes.id
-    WHERE resumes.id = ${resumeid}`)
-    resume = resume[0][0]
-
-    // Add experience if exists
-    let experience
-    try {
-      experience = await db.execute(`
-      SELECT * FROM experiences
-      WHERE resume = ${resumeid}`)
-      experience = experience[0][0]
-    } catch {
-      experience = ''
-    }
-
-    // Add education if exists
-    let education
-    try {
-      education = await db.execute(`
-      SELECT * FROM education
-      WHERE resume = ${resumeid}`)
-      education = education[0][0]
-    } catch {
-      education = ''
-    }
+    const resume = await db.getResume(resumeid)
+    const experiences = await db.getExperiences(resumeid)
 
     if (resume) {
-      res.render('editor', { resume: resume, edu: education, exp: experience, id: resumeid })
+      res.render('editor', { resume: resume, exp: experiences })
     } else {
       throw Error('Resume not found')
     }
   } catch (err) {
+    console.log('Error found: ' + err)
     // Not found, redirect to login
     res.render('login', { error: err })
-  } finally {
-    // Close connection
-    if (db) { db.end() }
   }
+  console.log('Getting Editor Done!!')
 })
 
 router.get('/logout', (req, res) => {

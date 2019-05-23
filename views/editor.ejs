@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../public/css/main.css">
+    <!-- <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../public/css/main.css"> -->
     <title>Resume Builder</title>
 </head>
 <body>
@@ -31,6 +31,8 @@
         </div>
         
         <h2>Experience</h2>
+        <%= exp.title %>
+
         <div>
           <label>Title<input name="exp-title" value="<%= exp ? exp.title : '' %>"></label>
           <label>Location<input name="exp-location" value="<%= exp ? exp.location : '' %>"></label>
@@ -38,15 +40,7 @@
           <label>To<input name="exp-to" value="<%= exp ? exp.to : '' %>"></label>
           <label>Summary<textarea name="exp-summary" rows="8"><%= exp ? exp.summary : '' %></textarea></label>
         </div>
-        
-        <h2>Education</h2>
-        <div>
-          <label>Title<input name="edu-title" value="<%= edu ? edu.title : '' %>"></label>
-          <label>Location<input name="edu-location" value="<%= edu ? edu.location : '' %>"></label>
-          <label>From<input name="edu-from" value="<%= edu ? edu.from : '' %>"></label>
-          <label>To<input name="edu-to" value="<%= edu ? edu.to : '' %>"></label>
-          <label>Summary<textarea name="edu-summary" rows="8"><%= edu ? edu.summary : '' %></textarea></label>
-        </div>
+
         <button>Save</button>
         </form>
       </div>
@@ -54,7 +48,7 @@
     </section>
     <section id="preview">
       <div id="preview-inner">
-        <iframe id="resumeIframe" src="/resume" class="paper"></iframe> 
+        <!-- <iframe id="resumeIframe" src="/resume" class="paper"></iframe>  -->
       </div>
       <button id="refreshResume">Refresh resume</button>
       <button id="toggleEditor">Toggle editor</button>
