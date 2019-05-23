@@ -42,12 +42,20 @@ module.exports = class database {
     return rows.insertId
   }
 
+  async getResumesFromUser (userid) {
+    const [rows, fields] = await this.db.execute(
+      'SELECT * FROM resumes WHERE user_id = ?',
+      [userid]
+    )
+    return rows
+  }
+
   async getResume (resumeid) {
     const [rows, fields] = await this.db.execute(
       'SELECT * FROM resumes WHERE id = ?',
       [resumeid]
     )
-    return rows[0]
+    return rows
   }
 
   async newExperience (resumeid) {
