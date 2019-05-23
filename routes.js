@@ -5,13 +5,24 @@ const formParser = require('body-parser').urlencoded({ extended: false })
 const jsonParser = require('body-parser').json()
 
 // Connect to database
-const database = require('./database')
-const db = new database()
+const Database = require('./database')
+const db = new Database()
 db.connect()
 
-// Checks if session exists, else redirects to login
+// Checks if user is logged in, else redirects to login
 const requireLogin = (req, res, next) => {
-  req.session.populated ? next() : res.render('login')
+  req.session.user ? next() : res.render('login')
+}
+
+// Checks if user has selected resume, else selects first
+const requireResume = (req, res, next) => {
+  if (!req.session.resume) {
+    console.log('No resume set. Selecting first one.')
+    db.getResumesFromUser(req.session.user).then(resume => {
+      req.session.resume = resume[0].id
+    })
+  }
+  next()
 }
 
 // Ignores requests to favicon
@@ -22,26 +33,19 @@ router.get('/', requireLogin, (req, res) => {
   res.redirect('/login')
 })
 
-
 router.get('/error', async (req, res, next) => {
-  
-  //throw Error('User already exists')
+  // throw Error('User already exists')
   next('Errrrrrr')
-
 })
 
 router.get('/test', async (req, res) => {
-  
-  let tst = await db.getExperiences(1)
-  //let tst = await db.loginUser('a', 'b')
-  //let exists = await db.userExists('test@uib.no')
-  //let userid = await db.newUser('testbro', 'dude')
-  //let resumeid = await db.newResume(userid)
-  if(exists) {
-    // Try to log in
-  } else {
-    // Create new user
-  }
+  req.session.resume = null
+  // let tst = await db.getExperiences(1)
+  // let tst = await db.loginUser('a', 'b')
+  // let exists = await db.userExists('test@uib.no')
+  // let userid = await db.newUser('testbro', 'dude')
+  // let resumeid = await db.newResume(userid)
+
   res.end()
 })
 
@@ -93,25 +97,17 @@ router.route('/login')
     res.redirect('editor')
   })
 
-router.get('/editor', requireLogin, async (req, res, next) => {
-  let resumeid = req.session.resume
-
-  // If no resume is selected, choose the first one, then save to session
-  if (!resumeid){
-    const user_resumes = await db.getResumesFromUser(req.session.user)
-    resumeid = user_resumes[0].id
-    req.session.resume = resumeid
-  }
-
-  const resume = await db.getResume(resumeid)
-  const experiences = await db.getExperiences(resumeid)
+router.get('/editor', requireLogin, requireResume, async (req, res, next) => {
+  const resumeid = req.session.resume
 
   try {
+    // Load resume and experience, then render in the editor
+    const resume = await db.getResume(resumeid)
+    const experiences = await db.getExperiences(resumeid)
     res.render('editor', { resume: resume, experiences: experiences })
   } catch (err) {
     next('Could not load resume: ' + err)
   }
-
 })
 
 router.get('/logout', (req, res) => {
@@ -120,51 +116,11 @@ router.get('/logout', (req, res) => {
 })
 
 router.route('/resume')
-  .get(requireLogin, async (req, res) => {
-    let db
-    const resumeid = req.session.resumeid
-    try {
-      db = await mysql.createConnection(sqlConfig)
-      let resume = await db.execute(`
-      SELECT * FROM users
-      INNER JOIN resumes ON users.resume = resumes.id
-      WHERE resumes.id = ${resumeid}`)
-      resume = resume[0][0]
-  
-      // Add experience if exists
-      let experience
-      try {
-        experience = await db.execute(`
-        SELECT * FROM experiences
-        WHERE resume = ${resumeid}`)
-        experience = experience[0][0]
-      } catch {
-        throw Error('Experience not found')
-      }
-  
-      // Add education if exists
-      let education
-      try {
-        education = await db.execute(`
-        SELECT * FROM education
-        WHERE resume = ${resumeid}`)
-        education = education[0][0]
-      } catch {
-        throw Error('Education not found')
-      }
-
-      if (resume) {
-        res.render('resume', { resume: resume, edu: education, exp: experience })
-      } else {
-        throw Error('Resume not found')
-      }
-    } catch (err) {
-      // Not found, redirect to login
-      res.render('login', { error: 'Could not get all required data: ' + err })
-    } finally {
-      // Close connection
-      if (db) { db.end() }
-    }
+  .get(requireLogin, requireResume, async (req, res) => {
+    const resumeid = req.session.resume
+    const resume = await db.getResume(resumeid)
+    const experiences = await db.getExperiences(resumeid)
+    res.render('resume', { resume: resume, experiences: experiences })
   })
   .put(requireLogin, jsonParser, async (req, res) => {
     let db
