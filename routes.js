@@ -98,16 +98,11 @@ router.route('/login')
   })
 
 router.get('/editor', requireLogin, requireResume, async (req, res, next) => {
+  // Load resume and experience, then render in the editor
   const resumeid = req.session.resume
-
-  try {
-    // Load resume and experience, then render in the editor
-    const resume = await db.getResume(resumeid)
-    const experiences = await db.getExperiences(resumeid)
-    res.render('editor', { resume: resume, experiences: experiences })
-  } catch (err) {
-    next('Could not load resume: ' + err)
-  }
+  const resume = await db.getResume(resumeid)
+  const experiences = await db.getExperiences(resumeid)
+  res.render('editor', { resume: resume, experiences: experiences })
 })
 
 router.get('/logout', (req, res) => {
