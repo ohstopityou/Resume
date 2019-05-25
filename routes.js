@@ -2,7 +2,8 @@
 
 const router = require('express').Router()
 const formParser = require('body-parser').urlencoded({ extended: false })
-const multiformParser = require('multer')
+const multer = require('multer')
+const multiformParser = multer().none()
 
 // Connect to database
 const Database = require('./database')
@@ -19,7 +20,7 @@ const requireResume = (req, res, next) => {
   if (!req.session.resume) {
     console.log('No resume set. Selecting last one.')
     db.getResumeIdsFromUser(req.session.user).then(resumes => {
-      req.session.resume = resumes.pop()
+      req.session.resume = resumes.pop().id
       next()
     })
   } else {
@@ -53,11 +54,11 @@ router.post('/signup', formParser, async (req, res, next) => {
   const email = req.body.email
   const password = req.body.password
   if (!email || !password) {
-    next('Missing username or password')
+    return next('Missing username or password')
   }
   const user = await db.getUser(email)
-  if (user.length) {
-    next('User already exists')
+  if (!user.length) {
+    return next('User already exists')
   }
 
   // Create new user, save to session
@@ -74,18 +75,17 @@ router.route('/login')
   .get(requireLogin, (req, res) => {
     res.redirect('editor')
   })
-  .post(formParser, async (req, res) => {
+  .post(formParser, async (req, res, next) => {
     const email = req.body.email
     const password = req.body.password
-
-    if ( !email || !password ) {
-      next('Missing username or password')
+    if (!email || !password) {
+      return next('Missing username or password')
     }
 
     const user = await db.getUser(email)
     const correctPassword = await db.verifyUser(user, password)
-    if ( !correctPassword ) {
-      next('Wrong username or password')
+    if (!correctPassword) {
+      return next('Wrong username or password')
     }
 
     // Save user to session
@@ -93,12 +93,10 @@ router.route('/login')
     res.redirect('editor')
   })
 
-router.get('/editor', requireLogin, requireResume, async (req, res, next) => {
+router.get('/editor', requireLogin, requireResume, async (req, res) => {
   // Load resume and experience, then render in the editor
   const resumeid = req.session.resume
-  console.log(resumeid)
   const resume = await db.getResume(resumeid)
-  
   const experiences = await db.getExperiences(resumeid)
   res.render('editor', { resume: resume, experiences: experiences })
 })
@@ -116,10 +114,14 @@ router.route('/resume')
     const experiences = await db.getExperiences(resumeid)
     res.render('resume', { resume: resume, experiences: experiences })
   })
-  .put(requireLogin, requireResume, multiformParser, async (req, res) => {
-    console.log(req.body)
-    res.end()
-    // TODO
+  .post(multiformParser, async (req, res) => {
+    // Create resume with null values from request
+    let resume = req.body
+    resume.id = req.session.resume
+    for (let key in resume) { resume[key] = resume[key] || null }
+
+    db.updateResume(resume)
+    res.redirect('editor')
   })
 
 router.all('*', (req, res) => {

@@ -61,30 +61,35 @@ module.exports = class database {
   }
 
   updateResume (resume) {
-    const query = `
-    UPDATE resumes
-    SET worktitle = ?,
-    summary = ?,
-    picture = ?
-    name = ?
-    email = ?
-    phone = ?
-    address = ?
-    postcode = ?
-    city = ?
-    WHERE id = ?`
-    this.db.execute(query,
-      [
-        resume.worktitle,
-        resume.summary,
-        resume.picture,
-        resume.name,
-        resume.email,
-        resume.phone,
-        resume.address,
-        resume.postcode,
-        resume.city
-      ]).then(console.log('Updated resume'))
+    try {
+      const query = `
+      UPDATE resumes
+      SET worktitle = ?,
+      summary = ?,
+      picture = ?,
+      name = ?,
+      email = ?,
+      phone = ?,
+      address = ?,
+      postcode = ?,
+      city = ?
+      WHERE id = ?`
+      this.db.execute(query,
+        [
+          resume.worktitle,
+          resume.summary,
+          resume.picture,
+          resume.name,
+          resume.email,
+          resume.phone,
+          resume.address,
+          resume.postcode,
+          resume.city,
+          resume.id
+        ]).then(console.log('Updated resume'))
+    } catch (err) {
+      console.log('Problems inserting')
+    }
   }
 
   async deleteExperience (experienceid) {
