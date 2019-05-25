@@ -17,7 +17,8 @@
   <main>
     <section id="editor">
       <div class="inner">
-        <form autocomplete="off" id="resumeForm" action="/resume" method="put" enctype="multipart/form-data">
+          <!--  autocomplete="off" id="resumeForm" FIX POST TO PUT!! -->
+        <form action="/resume" method="post" enctype="multipart/form-data">
         <h2>Personal Info</h2>
         <div>
           <label>Name<input name="name" value="<%= resume.name %>"></label>
