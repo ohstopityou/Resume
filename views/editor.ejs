@@ -17,31 +17,72 @@
   <main>
     <section id="editor">
       <div class="inner">
-          <!--  autocomplete="off" id="resumeForm" FIX POST TO PUT!! -->
         <form action="#" method="post" enctype="multipart/form-data" id="resumeForm" autocomplete="off">
         <h2>Personal Info</h2>
-        <div>
+        <div id="resumeInput">
           <input type="hidden" name="id" value="<%= resume.id %>">
-          <label>Name<input name="name" value="<%= resume.name %>"></label>
-          <label>Picture URL<input name="picture" value="<%= resume.picture %>"></label>
-          <label>Work Title<input name="worktitle" value="<%= resume.worktitle %>"></label>
-          <label>Email<input name="email" type="email" value="<%= resume.email %>"></label>
-          <label>Phone<input name="phone" type="number" value="<%= resume.phone %>"></label>
-          <label>Address<input name="address" value="<%= resume.address %>"></label>
-          <label>City<input name="city" value="<%= resume.city %>"></label>
-          <label>Post code<input name="postcode" type="number" value="<%= resume.postcode %>"></label>
-          <label>Summary<textarea name="summary" rows="8"><%= resume.summary %></textarea></label>
+          <div>
+            <label for="name">Name</label>
+            <input name="name" value="<%= resume.name %>">
+          </div>
+          <div>
+            <label for="picture">Picture URL</label>
+            <input name="picture" value="<%= resume.picture %>">
+          </div>
+          <div>
+            <label for="work-title">Work Title</label>
+            <input name="worktitle" value="<%= resume.worktitle %>">
+          </div>
+          <div>
+            <label for="input">Email</label>
+            <input name="email" type="email" value="<%= resume.email %>">
+          </div>
+          <div>
+            <label for="phone">Phone</label>
+            <input name="phone" type="number" value="<%= resume.phone %>">
+          </div>
+          <div>
+            <label for="address">Address</label>
+            <input name="address" value="<%= resume.address %>">
+          </div>
+          <div>
+            <label for="city">City</label>
+            <input name="city" value="<%= resume.city %>">
+          </div>
+          <div>
+            <label for="postcode">Post code</label>
+            <input name="postcode" type="number" value="<%= resume.postcode %>">
+          </div>
+          <div>
+            <label for="summary">Summary</label>
+            <textarea name="summary" rows="8"><%= resume.summary %></textarea>
+          </div>
         </div>
         
         <h2>Experience</h2>
         <% experiences.forEach(function(exp) { %>
           <div class="experience">
             <input type="hidden" name="exp[<%= exp.id %>][id]" value="<%= exp.id %>">
-            <label>Title<input name="exp[<%= exp.id %>][title]" value="<%= exp.title %>"></label>
-            <label>Location<input name="exp[<%= exp.id %>][location]" value="<%= exp.location %>"></label>
-            <label>From<input name="exp[<%= exp.id %>][start]" value="<%= exp.start %>"></label>
-            <label>To<input name="exp[<%= exp.id %>][end]" value="<%= exp.end %>"></label>
-            <label>Summary<textarea name="exp[<%= exp.id %>][summary]" rows="8"><%= exp.summary %></textarea></label>
+            <div>
+              <label for="exp[<%= exp.id %>][title]">Title</label>
+              <input name="exp[<%= exp.id %>][title]" value="<%= exp.title %>">
+            </div>
+            <div>
+              <label for="exp[<%= exp.id %>][location]">Location</label>
+              <input name="exp[<%= exp.id %>][location]" value="<%= exp.location %>">
+            </div>
+            <div>
+              <label for="exp[<%= exp.id %>][start]">Start</label>
+              <input name="exp[<%= exp.id %>][start]" value="<%= exp.start %>">
+            </div>
+            <div>
+              <label for="exp[<%= exp.id %>][end]">End</label>
+              <input name="exp[<%= exp.id %>][end]" value="<%= exp.end %>">
+            </div>
+            <div>
+              <label for="exp[<%= exp.id %>][summary]">Summary</label>
+              <textarea name="exp[<%= exp.id %>][summary]" rows="8"><%= exp.summary %></textarea>
+            </div>
           </div>
         <% }); %>
 

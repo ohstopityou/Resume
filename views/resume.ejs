@@ -31,7 +31,7 @@
           <h3>Experience</h3>
           <% experiences.forEach(function(exp) { %>
             <div class="wrapper">
-              <p class="duration"><time><%= exp.from %></time> - <time><%= exp.to %></time></p>
+              <p class="duration"><time><%= exp.start %></time> - <time><%= exp.end %></time></p>
               <h4><span class="title"><%= exp.title %></span> - <span class="origin"><%= exp.location %></span></h4>
               <p class="summary"><%= exp.summary %></p>
             </div>
