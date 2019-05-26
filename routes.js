@@ -114,14 +114,17 @@ router.route('/resume')
     const experiences = await db.getExperiences(resumeid)
     res.render('resume', { resume: resume, experiences: experiences })
   })
-  .post(multiformParser, async (req, res) => {
+  .put(multiformParser, async (req, res) => {
     // Create resume with null values from request
     let resume = req.body
-    resume.id = req.session.resume
     for (let key in resume) { resume[key] = resume[key] || null }
-
     db.updateResume(resume)
-    res.redirect('editor')
+
+    // Update experiences
+    let experiences = resume.exp
+    for (let id in experiences) { db.updateExperience(experiences[id]) }
+
+    res.end()
   })
 
 router.all('*', (req, res) => {
