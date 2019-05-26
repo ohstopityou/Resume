@@ -91,7 +91,6 @@ module.exports = class database {
   }
 
   updateExperience (experience) {
-    console.log(experience)
     const query = `
     UPDATE experiences
     SET title = ?,
@@ -113,7 +112,10 @@ module.exports = class database {
       .catch(err => { console.log('problems inserting: ' + err) })
   }
 
-  async deleteExperience (experienceid) {
-    // todo
+  deleteExperience (experienceid) {
+    const query = `DELETE FROM experiences WHERE id = ?`
+    this.db.execute(query, [experienceid])
+      .then(console.log('Deleted experience'))
+      .catch(err => { console.log('problems inserting: ' + err) })
   }
 }

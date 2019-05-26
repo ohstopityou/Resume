@@ -57,7 +57,7 @@ router.post('/signup', formParser, async (req, res, next) => {
     return next('Missing username or password')
   }
   const user = await db.getUser(email)
-  if (!user.length) {
+  if (user) {
     return next('User already exists')
   }
 
