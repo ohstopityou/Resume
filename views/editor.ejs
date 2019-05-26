@@ -18,28 +18,30 @@
     <section id="editor">
       <div class="inner">
           <!--  autocomplete="off" id="resumeForm" FIX POST TO PUT!! -->
-        <form action="/resume" method="post" enctype="multipart/form-data">
+        <form action="#" method="post" enctype="multipart/form-data" id="resumeForm" autocomplete="off">
         <h2>Personal Info</h2>
         <div>
+          <input type="hidden" name="id" value="<%= resume.id %>">
           <label>Name<input name="name" value="<%= resume.name %>"></label>
           <label>Picture URL<input name="picture" value="<%= resume.picture %>"></label>
           <label>Work Title<input name="worktitle" value="<%= resume.worktitle %>"></label>
           <label>Email<input name="email" type="email" value="<%= resume.email %>"></label>
-          <label>Phone<input name="phone" type="tel" value="<%= resume.phone %>"></label>
+          <label>Phone<input name="phone" type="number" value="<%= resume.phone %>"></label>
           <label>Address<input name="address" value="<%= resume.address %>"></label>
           <label>City<input name="city" value="<%= resume.city %>"></label>
-          <label>Post code<input name="postcode" value="<%= resume.postcode %>"></label>
+          <label>Post code<input name="postcode" type="number" value="<%= resume.postcode %>"></label>
           <label>Summary<textarea name="summary" rows="8"><%= resume.summary %></textarea></label>
         </div>
         
         <h2>Experience</h2>
         <% experiences.forEach(function(exp) { %>
-          <div>
-            <label>Title<input name="exp-title" value="<%= exp.title %>"></label>
-            <label>Location<input name="exp-location" value="<%= exp.location %>"></label>
-            <label>From<input name="exp-from" value="<%= exp.from %>"></label>
-            <label>To<input name="exp-to" value="<%= exp.to %>"></label>
-            <label>Summary<textarea name="exp-summary" rows="8"><%= exp.summary %></textarea></label>
+          <div class="experience">
+            <input type="hidden" name="exp[<%= exp.id %>][id]" value="<%= exp.id %>">
+            <label>Title<input name="exp[<%= exp.id %>][title]" value="<%= exp.title %>"></label>
+            <label>Location<input name="exp[<%= exp.id %>][location]" value="<%= exp.location %>"></label>
+            <label>From<input name="exp[<%= exp.id %>][start]" value="<%= exp.start %>"></label>
+            <label>To<input name="exp[<%= exp.id %>][end]" value="<%= exp.end %>"></label>
+            <label>Summary<textarea name="exp[<%= exp.id %>][summary]" rows="8"><%= exp.summary %></textarea></label>
           </div>
         <% }); %>
 
@@ -50,7 +52,7 @@
     </section>
     <section id="preview">
       <div id="preview-inner">
-        <!-- <iframe id="resumeIframe" src="/resume" class="paper"></iframe>  -->
+        <iframe id="resumeIframe" src="/resume" class="paper"></iframe> 
       </div>
       <button id="refreshResume">Refresh resume</button>
       <button id="toggleEditor">Toggle editor</button>

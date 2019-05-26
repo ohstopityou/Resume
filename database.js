@@ -45,7 +45,7 @@ module.exports = class database {
   async getResume (resumeid) {
     const query = `SELECT * FROM resumes WHERE id = ?`
     const [rows, fields] = await this.db.execute(query, [resumeid])
-    return rows
+    return rows[0]
   }
 
   async newExperience (resumeid) {
@@ -61,35 +61,56 @@ module.exports = class database {
   }
 
   updateResume (resume) {
-    try {
-      const query = `
-      UPDATE resumes
-      SET worktitle = ?,
-      summary = ?,
-      picture = ?,
-      name = ?,
-      email = ?,
-      phone = ?,
-      address = ?,
-      postcode = ?,
-      city = ?
-      WHERE id = ?`
-      this.db.execute(query,
-        [
-          resume.worktitle,
-          resume.summary,
-          resume.picture,
-          resume.name,
-          resume.email,
-          resume.phone,
-          resume.address,
-          resume.postcode,
-          resume.city,
-          resume.id
-        ]).then(console.log('Updated resume'))
-    } catch (err) {
-      console.log('Problems inserting')
-    }
+    const query = `
+    UPDATE resumes
+    SET worktitle = ?,
+    summary = ?,
+    picture = ?,
+    name = ?,
+    email = ?,
+    phone = ?,
+    address = ?,
+    postcode = ?,
+    city = ?
+    WHERE id = ?`
+    this.db.execute(query,
+      [
+        resume.worktitle,
+        resume.summary,
+        resume.picture,
+        resume.name,
+        resume.email,
+        resume.phone,
+        resume.address,
+        resume.postcode,
+        resume.city,
+        resume.id
+      ])
+      .then(console.log('Updated resume'))
+      .catch(err => { console.log('problems inserting: ' + err) })
+  }
+
+  updateExperience (experience) {
+    console.log(experience)
+    const query = `
+    UPDATE experiences
+    SET title = ?,
+    location = ?,
+    start = ?,
+    end = ?,
+    summary = ?
+    WHERE id = ?`
+    this.db.execute(query,
+      [
+        experience.title,
+        experience.location,
+        experience.start,
+        experience.end,
+        experience.summary,
+        experience.id
+      ])
+      .then(console.log('Updated experience'))
+      .catch(err => { console.log('problems inserting: ' + err) })
   }
 
   async deleteExperience (experienceid) {

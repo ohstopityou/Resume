@@ -22,22 +22,34 @@ refreshResumeButton.addEventListener('click', event => {
   resumeIframe.contentWindow.location.reload()
 })
 
-// const resumeForm = document.getElementById('resumeForm')
-// resumeForm.addEventListener('submit', event => {
-//   event.preventDefault()
-//   // Update resume using put
-//   fetch('/resume', {
-//     method: 'PUT',
-//     headers: {
-//       'Content-type': 'application/json'
-//     },
-//     body: formToJSONString(event.target)
-//   })
-//     .then(validateResponse)
-//     // Refreshes resume iframe
-//     .then(resumeIframe.contentWindow.location.reload())
-//     .catch(console.log)
-// })
+const resumeForm = document.getElementById('resumeForm')
+resumeForm.addEventListener('submit', event => {
+  event.preventDefault()
+  let formData = new FormData(resumeForm)
+  console.log(formData)
+  for (var [key, value] of formData.entries()) {
+    console.log(key + ' ' + value)
+  }
+
+  console.log(formData.get('exp'))
+
+  fetch('/resume', {
+    method: 'PUT',
+    body: formData
+  }).then(console.log('done'))
+
+  // fetch('/resume', {
+  //   method: 'PUT',
+  //   headers: {
+  //     'Content-type': 'application/json'
+  //   },
+  //   body: formToJSONString(event.target)
+  // })
+  //   .then(validateResponse)
+  //   // Refreshes resume iframe
+  //   .then(resumeIframe.contentWindow.location.reload())
+  //   .catch(console.log)
+})
 
 // function formToJSONString (form) {
 //   const formData = new FormData(form)
