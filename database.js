@@ -35,7 +35,6 @@ module.exports = class database {
     return rows.insertId
   }
 
-  // TODO: change to only select ids
   async getResumeIdsFromUser (userid) {
     const query = `SELECT id FROM resumes WHERE user_id = ?`
     const [rows, fields] = await this.db.execute(query, [userid])

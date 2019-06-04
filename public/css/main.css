@@ -54,46 +54,41 @@ header {
   min-width: 500px;
   overflow: scroll;
 }
-
 #editor .inner {
   height: 100%;
+  width: 100%;
+  margin: 1em auto;
   padding: 1em;
-  margin: auto;
 }
 
-form {
+#form-resume {
   font-family: sans-serif;
   display: flex;
   flex-direction: column;
 }
-
-label {
-  display: flex;
-  flex-basis: 300px;
-  flex-grow: 1;
-  color: #333;
-  margin: 0.5em;
-}
-
-#resumeInput {
+#form-resume section {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
-  margin: 1em auto;
 }
-
-#resumeInput div {
+#form-resume section label {
+  color: #333;
+  padding: 0.5em;
   flex-grow: 1;
   flex-basis: 50%;
 }
+#form-resume section .input-wide {
+  flex-basis: 250px;
+}
+#form-resume .experience {
+  border-bottom: 3px solid black;
+}
 
 input, textarea {
-  flex-grow: 1;
+  width: 100%;
   outline: none;
   resize: none;
   border: 0;
   padding: 0.5em;
-  margin-left: 1em;
   border-radius: 2px;
   background: #eee;
 }
@@ -106,8 +101,7 @@ input, textarea {
   overflow: scroll;
   padding: 0 2em;
 }
-
-#preview-inner {
+#preview .inner {
   margin: 3em auto;
   width: calc(var(--a4-w) * var(--resume-scale));
   height: calc(var(--a4-h) * var(--resume-scale));
@@ -115,8 +109,7 @@ input, textarea {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   overflow: hidden;
 }
-
-#preview iframe {
+#preview .inner iframe {
   border: 0;
   transform: scale(var(--resume-scale));
   transform-origin: 0 0;

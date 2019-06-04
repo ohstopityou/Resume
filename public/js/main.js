@@ -1,36 +1,48 @@
 'use strict'
 
-// Response is ok if status code is 2XX
-// Response body is data or error message
-function validateResponse (response) {
-  if (!response.ok) {
-    throw response
-  }
-  return response
-}
-
 const toggleEditorButton = document.getElementById('toggleEditor')
 const editorPanel = document.getElementById('editor')
 toggleEditorButton.addEventListener('click', event => {
-  editorPanel.style.display = (editorPanel.style.display === 'none' ? 'block' : 'none')
+  editorPanel.stye.display = (editorPanel.style.display === 'none' ? 'block' : 'none')
 })
 
-const refreshResumeButton = document.getElementById('refreshResume')
-const resumeIframe = document.getElementById('resumeIframe')
-refreshResumeButton.addEventListener('click', event => {
-  console.log('reloading iframe')
-  resumeIframe.contentWindow.location.reload()
-})
-
-const resumeForm = document.getElementById('resumeForm')
+const resumeForm = document.getElementById('form-resume')
+// Send form to server, then update editor
 resumeForm.addEventListener('submit', event => {
   event.preventDefault()
-  let formData = new FormData(resumeForm)
-
-  fetch('/resume', {
-    method: 'PUT',
-    body: formData
-  })
-    .then(resumeIframe.contentWindow.location.reload())
-    .catch(console.log('reeeeeeeeeee'))
+  saveResume()
+    .then(refreshResume())
 })
+
+// Create new experience
+const newExperienceBtn = document.getElementById('new-experience-btn')
+newExperienceBtn.addEventListener('click', () => {
+  saveResume()
+    .then(fetch('/experience/new', { method: 'POST' }))
+    .then(refreshPage())
+    .catch(console.log)
+})
+
+// Buttons to delete experiences
+const deleteBtns = document.querySelectorAll('.delete-experience-btn')
+deleteBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    saveResume()
+      .then(fetch(`/experience/${btn.dataset.id}`, { method: 'DELETE' }))
+      .then(btn.parentElement.remove())
+      .then(refreshResume())
+      .catch(console.log)
+  })
+})
+
+function refreshPage () {
+  location.reload()
+}
+
+function refreshResume () {
+  document.getElementById('resume-iframe').contentWindow.location.reload()
+}
+
+async function saveResume () {
+  await fetch('/resume', { method: 'PUT', body: new FormData(resumeForm) })
+}
