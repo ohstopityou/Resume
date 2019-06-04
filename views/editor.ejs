@@ -9,53 +9,52 @@
     <link rel="stylesheet" href="../public/css/main.css"> -->
     <title>Resume Builder</title>
 </head>
-<body>
+<body class="flex-col">
   <header>
     <h1>Resume Builder</h1>
     <a href="/logout">Log Out</a>
   </header>
   <main>
-    <section id="editor">
-      <div class="inner">
-        <form action="#" id="form-resume" autocomplete="off">
-          <input type="hidden" name="id" value="<%= resume.id %>">
-
+    <div id="editor-section">
+      <form action="#" id="editor" class="flex-col" autocomplete="off">
+        <input type="hidden" name="id" value="<%= resume.id %>">
+        <section class="flex-wrap">
           <h2>Personal Info</h2>
-          <section>
-            <label>Name
-              <input name="name" value="<%= resume.name %>">
-            </label>
-            <label>Picture URL
-              <input name="profilepic" type="file" value="test">
-            </label>
-            <label>Work Title
-              <input name="worktitle" value="<%= resume.worktitle %>" placeholder="Student, Electrician">
-            </label>
-            <label>Email
-              <input name="email" type="email" value="<%= resume.email %>">
-            </label>
-            <label>Phone
-              <input name="phone" type="number" value="<%= resume.phone %>">
-            </label>
-            <label>Address
-              <input name="address" value="<%= resume.address %>">
-            </label>
-            <label>City
-              <input name="city" value="<%= resume.city %>">
-            </label>
-            <label>Post Code
-              <input name="postcode" type="number" value="<%= resume.postcode %>">
-            </label>
-            <label class="input-wide">Summary
-              <p>A few sentences about your overall work experience.</p>
-              <textarea name="summary" rows="8"><%= resume.summary %></textarea>
-            </label>
-          </section>
-          
+          <label>Name
+            <input name="name" value="<%= resume.name %>">
+          </label>
+          <label>Picture URL
+            <input name="profilepic" type="file" value="test">
+          </label>
+          <label>Work Title
+            <input name="worktitle" value="<%= resume.worktitle %>" placeholder="Student, Electrician">
+          </label>
+          <label>Email
+            <input name="email" type="email" value="<%= resume.email %>">
+          </label>
+          <label>Phone
+            <input name="phone" type="number" value="<%= resume.phone %>">
+          </label>
+          <label>Address
+            <input name="address" value="<%= resume.address %>">
+          </label>
+          <label>City
+            <input name="city" value="<%= resume.city %>">
+          </label>
+          <label>Post Code
+            <input name="postcode" type="number" value="<%= resume.postcode %>">
+          </label>
+          <label class="input-wide">Summary
+            <p>A few sentences about your overall work experience.</p>
+            <textarea name="summary" rows="8"><%= resume.summary %></textarea>
+          </label>
+        </section>
+        
+        <section class="flex-col">
           <h2>Experiences</h2>
           <p>Add employment history, education, certifications and more.</p>
           <% experiences.forEach(function(exp) { %>
-            <section class="experience">
+            <div class="experience flex-wrap">
               <input type="hidden" name="exp[<%= exp.id %>][id]" value="<%= exp.id %>">
               <button type="button" class="delete-experience-btn" data-id="<%= exp.id %>">Remove</button>
               <label class="input-wide">Title
@@ -73,19 +72,21 @@
               <label class="input-wide">Summary
                 <textarea name="exp[<%= exp.id %>][summary]" rows="6"><%= exp.summary %></textarea>
               </label>
-            </section>
+            </div>
           <% }); %>
           <button type="button" id="new-experience-btn">New Experience</button>
-          <button>Save</button>
-        </form>
+        </section>
+      </form>
+    </div>
+    <div id="preview-section">
+      <div id="preview-wrapper">
+        <iframe id="preview" src="/resume" class="paper"></iframe> 
       </div>
-    </section>
-    <section id="preview">
-      <div class="inner">
-        <iframe id="resume-iframe" src="/resume" class="paper"></iframe> 
+      <div id="preview-hover">
+        <button type="button" id="toggle-editor-btn">Toggle editor</button>
+        <button type="button" id="update-btn">Update</button>
       </div>
-      <button type="button" id="toggleEditor">Toggle editor</button>
-    </section>
+    </div>
   </main>
 </body>
 </html>

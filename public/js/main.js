@@ -1,37 +1,33 @@
 'use strict'
 
-const toggleEditorButton = document.getElementById('toggleEditor')
-const editorPanel = document.getElementById('editor')
-toggleEditorButton.addEventListener('click', event => {
-  editorPanel.stye.display = (editorPanel.style.display === 'none' ? 'block' : 'none')
+// Button that hides or shows editor section
+document.getElementById('toggle-editor-btn').addEventListener('click', () => {
+  document.getElementById('editor-section').classList.toggle('display-none')
 })
 
-const resumeForm = document.getElementById('form-resume')
-// Send form to server, then update editor
-resumeForm.addEventListener('submit', event => {
-  event.preventDefault()
+// Button that updates resume
+document.getElementById('update-btn').addEventListener('click', () => {
   saveResume()
     .then(refreshResume())
+    .catch(handleError)
 })
 
-// Create new experience
-const newExperienceBtn = document.getElementById('new-experience-btn')
-newExperienceBtn.addEventListener('click', () => {
+// Button that creates a new experience
+document.getElementById('new-experience-btn').addEventListener('click', () => {
   saveResume()
     .then(fetch('/experience/new', { method: 'POST' }))
     .then(refreshPage())
-    .catch(console.log)
+    .catch(handleError)
 })
 
-// Buttons to delete experiences
-const deleteBtns = document.querySelectorAll('.delete-experience-btn')
-deleteBtns.forEach(btn => {
+// Buttons that deletes an experiences
+document.querySelectorAll('.delete-experience-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     saveResume()
       .then(fetch(`/experience/${btn.dataset.id}`, { method: 'DELETE' }))
       .then(btn.parentElement.remove())
       .then(refreshResume())
-      .catch(console.log)
+      .catch(handleError)
   })
 })
 
@@ -40,9 +36,15 @@ function refreshPage () {
 }
 
 function refreshResume () {
-  document.getElementById('resume-iframe').contentWindow.location.reload()
+  document.getElementById('preview').contentWindow.location.reload()
 }
 
 async function saveResume () {
-  await fetch('/resume', { method: 'PUT', body: new FormData(resumeForm) })
+  const resume = document.getElementById('editor')
+  await fetch('/resume', { method: 'PUT', body: new FormData(resume) })
+}
+
+function handleError (msg) {
+  console.error('--- Something went wrong ---')
+  console.error(msg)
 }

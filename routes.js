@@ -14,16 +14,17 @@ const Database = require('./database')
 const db = new Database()
 db.connect()
 
-// Checks if user is logged in, else redirects to login
+// Login middleware
 const requireLogin = (req, res, next) => {
+  // Renders login screen if not logged in
   req.session.user ? next() : res.render('login')
 }
 
-// Checks if user has selected a resume, else selects the last made
+// Resume middleware
 const requireResume = (req, res, next) => {
+  // Continues if a resume is selected
   if (req.session.resume) return next()
-
-  console.log('No resume set. Selecting last one.')
+  // else selects the last resume made
   db.getResumeIdsFromUser(req.session.user)
     .then(resumes => {
       req.session.resume = resumes.pop().id
@@ -94,16 +95,27 @@ router.route('/resume')
     const [resume, experiences] = await Promise.all([db.getResume(resumeid), db.getExperiences(resumeid)])
     res.render('resume', { resume: resume, experiences: experiences })
   })
-  .put(multiformParser, async (req, res) => {
-    // Create resume with null values from request
+  .put(multiformParser, async (req, res, next) => {
+    // Array that holds functions to be run in parallell
+    const ioPromises = []
+
+    // Create valid resume and update
     let resume = req.body
     for (let key in resume) { resume[key] = resume[key] || null }
-    db.updateResume(resume)
+    ioPromises.push(db.updateResume(resume))
 
+    // Update all experiences
     let experiences = resume.exp
-    for (let id in experiences) { db.updateExperience(experiences[id]) }
+    if (experiences) {
+      for (let id in experiences) { ioPromises.push(db.updateExperience(experiences[id])) }
+    }
 
-    if (req.file) { db.uploadImg(req.file, resume.id) }
+    // Upload profile picture to cloud
+    if (req.file) { ioPromises.push(db.uploadImg(req.file, resume.id)) }
+
+    Promise.all(ioPromises)
+      .then(res.sendStatus(204))
+      .catch(next)
   })
 
 router.post('/experience/new', requireLogin, requireResume, (req, res) => {

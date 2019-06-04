@@ -19,15 +19,16 @@ module.exports = class database {
     const fileName = `${Date.now()}.${ext}`
     const bucketName = 'resume-profilepictures'
 
+    // Upload URL to SQL before file to save time
+    const url = `https://storage.googleapis.com/${bucketName}/${fileName}`
+    const query = `UPDATE resumes SET picture = ? WHERE id = ?`
+    this.db.execute(query, [url, resumeid])
+
     // Upload image to cloud bucket
     await this.storage
       .bucket(bucketName)
       .file(fileName)
       .save(img.buffer)
-
-    const url = `https://storage.googleapis.com/${bucketName}/${fileName}`
-    const query = `UPDATE resumes SET picture = ? WHERE id = ?`
-    await this.db.execute(query, [url, resumeid])
   }
 
   async newUser (email, password) {
@@ -51,8 +52,9 @@ module.exports = class database {
 
   // Creates a new resume, returns resume Id
   async newResume (userid) {
-    const query = `INSERT INTO resumes (user_id) VALUES (?)`
-    const [rows, fields] = await this.db.execute(query, [userid])
+    const defaultPic = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
+    const query = `INSERT INTO resumes (user_id, picture) VALUES (?, ?)`
+    const [rows, fields] = await this.db.execute(query, [userid, defaultPic])
     return rows.insertId
   }
 
