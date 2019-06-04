@@ -36,30 +36,14 @@ router.get('/', requireLogin, (req, res) => {
   res.redirect('/login')
 })
 
-router.get('/test', async (req, res) => {
-  let resume = await db.getResume(50)
-  console.log(resume)
-  // req.session.resume = null
-  // let tst = await db.getExperiences(1)
-  // let tst = await db.loginUser('a', 'b')
-  // let exists = await db.userExists('test@uib.no')
-  // let userid = await db.newUser('testbro', 'dude')
-  // let resumeid = await db.newResume(userid)
-
-  res.end()
-})
-
 // Handles signup requests
 router.post('/signup', formParser, async (req, res, next) => {
   const email = req.body.email
   const password = req.body.password
-  if (!email || !password) {
-    return next('Missing username or password')
-  }
+  if (!email || !password) return next('Missing username or password')
+
   const user = await db.getUser(email)
-  if (user) {
-    return next('User already exists')
-  }
+  if (user) return next('User already exists')
 
   // Create new user, save to session
   const userid = await db.newUser(email, password)
@@ -78,15 +62,11 @@ router.route('/login')
   .post(formParser, async (req, res, next) => {
     const email = req.body.email
     const password = req.body.password
-    if (!email || !password) {
-      return next('Missing username or password')
-    }
+    if (!email || !password) return next('Missing username or password')
 
     const user = await db.getUser(email)
     const correctPassword = await db.verifyUser(user, password)
-    if (!correctPassword) {
-      return next('Wrong username or password')
-    }
+    if (!correctPassword) return next('Wrong username or password')
 
     // Save user to session
     req.session.user = user.id
@@ -120,12 +100,22 @@ router.route('/resume')
     for (let key in resume) { resume[key] = resume[key] || null }
     db.updateResume(resume)
 
-    // Update experiences
     let experiences = resume.exp
     for (let id in experiences) { db.updateExperience(experiences[id]) }
 
     res.end()
   })
+
+router.post('/experience/new', requireLogin, requireResume, async (req, res) => {
+  await db.newExperience(req.session.resume)
+  res.send('ok')
+})
+
+router.delete('/experience/:id', requireLogin, requireResume, async (req, res) => {
+  // TODO: check if experience belongs to resume
+  await db.deleteExperience(req.params.id)
+  res.send('ok')
+})
 
 router.all('*', (req, res) => {
   res.redirect('/')

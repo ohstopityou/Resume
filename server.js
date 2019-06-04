@@ -22,6 +22,4 @@ app.use(session({ name: 'session', secret: 'supersecret' }))
 
 app.use('/', routes)
 
-app.listen(PORT, () => {
-  console.log(`App listening at http://localhost:${PORT}`)
-})
+app.listen(PORT, () => { console.log(`App listening at http://localhost:${PORT}`) })
