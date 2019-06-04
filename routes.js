@@ -79,8 +79,7 @@ router.route('/login')
 router.get('/editor', requireLogin, requireResume, async (req, res) => {
   // Load resume and experience, then render in the editor
   const resumeid = req.session.resume
-  const resume = await db.getResume(resumeid)
-  const experiences = await db.getExperiences(resumeid)
+  const [resume, experiences] = await Promise.all([db.getResume(resumeid), db.getExperiences(resumeid)])
   res.render('editor', { resume: resume, experiences: experiences })
 })
 
@@ -92,9 +91,7 @@ router.get('/logout', (req, res) => {
 router.route('/resume')
   .get(requireLogin, requireResume, async (req, res) => {
     const resumeid = req.session.resume
-    // TODO: query both together
-    const resume = await db.getResume(resumeid)
-    const experiences = await db.getExperiences(resumeid)
+    const [resume, experiences] = await Promise.all([db.getResume(resumeid), db.getExperiences(resumeid)])
     res.render('resume', { resume: resume, experiences: experiences })
   })
   .put(multiformParser, async (req, res) => {
@@ -106,20 +103,16 @@ router.route('/resume')
     let experiences = resume.exp
     for (let id in experiences) { db.updateExperience(experiences[id]) }
 
-    if (req.file) { await db.uploadImg(req.file, resume.id) }
-
-    res.end()
+    if (req.file) { db.uploadImg(req.file, resume.id) }
   })
 
-router.post('/experience/new', requireLogin, requireResume, async (req, res) => {
-  await db.newExperience(req.session.resume)
-  res.send('ok')
+router.post('/experience/new', requireLogin, requireResume, (req, res) => {
+  db.newExperience(req.session.resume)
 })
 
 router.delete('/experience/:id', requireLogin, requireResume, async (req, res) => {
   // TODO: check if experience belongs to resume
-  await db.deleteExperience(req.params.id)
-  res.send('ok')
+  db.deleteExperience(req.params.id)
 })
 
 router.all('*', (req, res) => {
