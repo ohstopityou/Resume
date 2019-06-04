@@ -28,12 +28,21 @@ body {
   flex-direction: column;
   height: 100vh;
   background-color: #fff;
+  font-family: sans-serif;
 }
 
 main {
   display: flex;
+  width: 100vw;
+  height: calc(100vh - 3em);
+}
+
+#preview-section,
+#editor-section {
+  flex-basis: 50%;
   flex-grow: 1;
-  max-height: calc(100vh - 3em);
+  padding: 2em;
+  overflow: scroll;
 }
 
 header {
@@ -46,40 +55,27 @@ header {
   text-align: center;
 }
 
-#editor {
-  display: flex;
-  flex-grow: 0;
-  flex-shrink: 1;
-  flex-basis: 50%;
+#editor-section {
   min-width: 500px;
-  overflow: scroll;
 }
-#editor .inner {
-  height: 100%;
+#editor-section #editor {
+  margin: 0 auto;
+  max-width: 700px;
+}
+#editor-section #editor h2 {
   width: 100%;
-  margin: 1em auto;
-  padding: 1em;
 }
-
-#form-resume {
-  font-family: sans-serif;
-  display: flex;
-  flex-direction: column;
-}
-#form-resume section {
-  display: flex;
-  flex-wrap: wrap;
-}
-#form-resume section label {
+#editor-section #editor label {
   color: #333;
   padding: 0.5em;
   flex-grow: 1;
   flex-basis: 50%;
 }
-#form-resume section .input-wide {
+#editor-section #editor .input-wide {
   flex-basis: 250px;
 }
-#form-resume .experience {
+
+.experience {
   border-bottom: 3px solid black;
 }
 
@@ -93,39 +89,28 @@ input, textarea {
   background: #eee;
 }
 
-#preview {
-  display: flex;
+#preview-section {
   flex-grow: 1;
-  flex-shrink: 0;
+  display: grid;
+  place-items: center;
   background: #eee;
-  overflow: scroll;
-  padding: 0 2em;
 }
-#preview .inner {
-  margin: 3em auto;
+#preview-section #preview-wrapper {
   width: calc(var(--a4-w) * var(--resume-scale));
   height: calc(var(--a4-h) * var(--resume-scale));
   border-radius: 6px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   overflow: hidden;
 }
-#preview .inner iframe {
+#preview-section #preview-wrapper #preview {
   border: 0;
   transform: scale(var(--resume-scale));
   transform-origin: 0 0;
 }
-
-#toggleEditor {
-  margin: 2em;
+#preview-section #preview-hover {
   position: fixed;
+  margin: 2em;
   bottom: 0;
-  right: 0;
-}
-
-#refreshResume {
-  margin: 2em;
-  position: fixed;
-  bottom: 5em;
   right: 0;
 }
 
@@ -150,6 +135,20 @@ button, .button {
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.display-none {
+  display: none;
 }
 
 :root {
