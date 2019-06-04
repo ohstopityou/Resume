@@ -12,18 +12,20 @@ module.exports = class database {
       keyFilename: 'cloud_storage_key.json',
       projectId: 'silicon-synapse-232018'
     })
-    this.bucket = this.storage.bucket('resume-profilepictures')
   }
 
   async uploadImg (img, resumeid) {
     const ext = img.originalname.split('.').pop()
-    const cloudName = 'pic' + Date.now() + ext
-    const cloudFile = this.bucket.file(cloudName)
+    const fileName = `${Date.now()}.${ext}`
+    const bucketName = 'resume-profilepictures'
 
-    await cloudFile.save(img.buffer)
-    await cloudFile.makePublic()
-    const url = `https://storage.googleapis.com/resume-profilepictures/${cloudName}`
+    // Upload image to cloud bucket
+    await this.storage
+      .bucket(bucketName)
+      .file(fileName)
+      .save(img.buffer)
 
+    const url = `https://storage.googleapis.com/${bucketName}/${fileName}`
     const query = `UPDATE resumes SET picture = ? WHERE id = ?`
     await this.db.execute(query, [url, resumeid])
   }
