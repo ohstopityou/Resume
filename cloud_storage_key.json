@@ -1,0 +1,13 @@
+
+{
+  "type": "service_account",
+  "project_id": "silicon-synapse-232018",
+  "private_key_id": "cfc59c252e2526b0b91c490b3eb0722c9841674b",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDUwxCiEZwMm5XD\nzlN9smfYBMPcXzzRaaGUsYYGlW6z6v2ULKvfoHsW94BXVX3SZ5Ay+HKZNMYgGhIy\na5f+X+teLavfXt0AHGFeJy3jBHWcACxN5SdW73jI5X627wB01aOSFKr6YguYgzWl\nRAS0wRSlB02pw9AkmuGx4LanXYiRSuCXI+V3IcEiG+4kkJpD4j4yvfH/OZsjBfRb\nw2W23Ld/36dsfbAALkdRKwXExIoajTFd9rj8ampEJfwpNwx2I1+oPu75YjUW19Av\niKBnCnp3n9F5jVP/88m3Y638lTMUYjq3TfYHTosDJYO9uoDE0CIl4/7LQt6pAi1B\nADAAZ1xXAgMBAAECggEAKWtyNQL1nLS7Uru7oEhXlAPVd3To+6GzTaXDwEteGlOg\nmzSZHzd4Tw/O4fGoRYpY1bttX+sYuQ4qRbuRgvl8ckC06Y7nukpMIE7DTaNEHCMi\nfOWkI3YKTx3ybb2YmqYuqlUwtf7ZYA8HJg3YVrISCVCjK24N+tpWHtFu7aU1XYdZ\ndLtE5/8FitpHSKObuH+/IJ8tH1J6A1Gz7UOd8JVgt+dh2QpO5FIrjdWHfOVfFPmU\nQBdLRAD12lg9w8eiDwmXBEs4m8yfTVJf0FNk22lHtrtbcgN1DW5ORiehzjz8iN2q\n92pnEzAmJr3LlV6Aoc3hEwGrKPSkzkrTMeDVKYY7BQKBgQD/gtAr38PZFHDzUzMF\nYnjih/8AXyFpZoUGo+/3vgSChbRJBnxuMYqC0PSB96wbtWdipUk3sctiwxtJ0Olc\nDYxK2ZILF0EArLBqGSQ3rWlthHULIqsHajP5zdn9/MHmIZPUSUrWR5BRk/Q4mUZ6\nzJWY5PbOlH0kq3otzlIf0dndxQKBgQDVK06bCXK5Ij+J50TLQ8LV7Q4GfjkDlK4h\nVgm4tdnbM1Ut5IrDpUOrI3XnZ9R2F9gFUzU3yYc0drdniC5FPNhpeWJSAozaCvOj\nZGk4lTp0mH3e4a0I/4FGejqU8ba7hRi0UhMBdX90PLhQljXXeQapDxwyifxwTX91\n3ir6NqavawKBgQDv8YBcMz5P1Qpc9nyrSdYLpXqqdquBt2yk1766AA9sIvMywIyJ\nTqysPF3gzx0oyCnWUTF4w9YjYOV3ZGBAudhNUhP7plK8t27Ts9h3ELo4xnLDikLi\nK7GznMRh58KOwml4qXtFzt6QPUjS/d1Z5FV3x0yeooMCtKV/7ojgqMjXoQKBgHqq\nAQGV3j5KRuXD/wI4a9VOI9P4rjYxSEJGkDGJ82L/lvRhnrgWUWoZba9LQCb0cYoe\n53DCttqptcANzRJqgN2wy7MFZKfTxX8wOJwmwwx083ldw4R6Apnbm/o5XT1qyVx6\nHhWo1z678hPtW+4x5nNCDqfGX00AS2g3/+Mbr68hAoGANqhJ+GK4csrlaLSrdWLg\n8oUqka5yVDZUtpiThAAWUNYYChpNFGdAl4MN2f7uIoYuyStxSkW+aAwEyFi45bDv\nTQIaVObpqTc5tLAeT3aU8rX1CrzbcRutDYS07hE1j/XdtJqaZd+UCDIjRtMC7Zbc\nH0IEYRr2WbQSEC7bvzGKHN0=\n-----END PRIVATE KEY-----\n",
+  "client_email": "silicon-synapse-232018@appspot.gserviceaccount.com",
+  "client_id": "116599271906570439181",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/silicon-synapse-232018%40appspot.gserviceaccount.com"
+}

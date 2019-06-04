@@ -3,10 +3,29 @@
 const bcrypt = require('bcrypt')
 const mysql = require('mysql2/promise')
 const sqlConfig = require('./sqlconfig')
+const { Storage } = require('@google-cloud/storage')
 
 module.exports = class database {
   async connect () {
     this.db = await mysql.createConnection(sqlConfig)
+    this.storage = new Storage({
+      keyFilename: 'cloud_storage_key.json',
+      projectId: 'silicon-synapse-232018'
+    })
+    this.bucket = this.storage.bucket('resume-profilepictures')
+  }
+
+  async uploadImg (img, resumeid) {
+    const ext = img.originalname.split('.').pop()
+    const cloudName = 'pic' + Date.now() + ext
+    const cloudFile = this.bucket.file(cloudName)
+
+    await cloudFile.save(img.buffer)
+    await cloudFile.makePublic()
+    const url = `https://storage.googleapis.com/resume-profilepictures/${cloudName}`
+
+    const query = `UPDATE resumes SET picture = ? WHERE id = ?`
+    await this.db.execute(query, [url, resumeid])
   }
 
   async newUser (email, password) {
@@ -64,7 +83,6 @@ module.exports = class database {
     UPDATE resumes
     SET worktitle = ?,
     summary = ?,
-    picture = ?,
     name = ?,
     email = ?,
     phone = ?,
@@ -76,7 +94,6 @@ module.exports = class database {
       [
         resume.worktitle,
         resume.summary,
-        resume.picture,
         resume.name,
         resume.email,
         resume.phone,
@@ -86,7 +103,7 @@ module.exports = class database {
         resume.id
       ])
       .then(console.log('Updated resume'))
-      .catch(err => { console.log('problems inserting: ' + err) })
+      .catch(console.log)
   }
 
   updateExperience (experience) {

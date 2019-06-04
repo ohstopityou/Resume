@@ -2,8 +2,12 @@
 
 const router = require('express').Router()
 const formParser = require('body-parser').urlencoded({ extended: false })
-const multer = require('multer')
-const multiformParser = multer().none()
+const Multer = require('multer')
+const multerconfig = {
+  storage: Multer.MemoryStorage,
+  limits: { fileSize: 5 * 1024 * 1024 } // 5Mb
+}
+const multiformParser = Multer(multerconfig).single('profilepic')
 
 // Connect to database
 const Database = require('./database')
@@ -17,15 +21,14 @@ const requireLogin = (req, res, next) => {
 
 // Checks if user has selected a resume, else selects the last made
 const requireResume = (req, res, next) => {
-  if (!req.session.resume) {
-    console.log('No resume set. Selecting last one.')
-    db.getResumeIdsFromUser(req.session.user).then(resumes => {
+  if (req.session.resume) return next()
+
+  console.log('No resume set. Selecting last one.')
+  db.getResumeIdsFromUser(req.session.user)
+    .then(resumes => {
       req.session.resume = resumes.pop().id
       next()
     })
-  } else {
-    next()
-  }
 }
 
 // Ignores requests to favicon
@@ -102,6 +105,8 @@ router.route('/resume')
 
     let experiences = resume.exp
     for (let id in experiences) { db.updateExperience(experiences[id]) }
+
+    if (req.file) { await db.uploadImg(req.file, resume.id) }
 
     res.end()
   })

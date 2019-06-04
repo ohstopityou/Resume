@@ -26,7 +26,7 @@
               <input name="name" value="<%= resume.name %>">
             </label>
             <label>Picture URL
-              <input name="picture" value="<%= resume.picture %>">
+              <input name="profilepic" type="file" value="test">
             </label>
             <label>Work Title
               <input name="worktitle" value="<%= resume.worktitle %>" placeholder="Student, Electrician">
@@ -77,7 +77,6 @@
           <% }); %>
           <button type="button" id="new-experience-btn">New Experience</button>
           <button>Save</button>
-          <button type="button" onclick="test()">test</button>
         </form>
       </div>
     </section>
