@@ -44,10 +44,11 @@
           <label>Post Code
             <input name="postcode" type="number" value="<%= resume.postcode %>">
           </label>
-          <label class="input-wide">Summary
-            <p>A few sentences about your overall work experience.</p>
-            <textarea name="summary" rows="8"><%= resume.summary %></textarea>
-          </label>
+        </section>
+        <section>
+          <h2>Professional Summary</h2>
+          <p>A few sentences about your overall work experience.</p>
+          <textarea name="summary" rows="8"><%= resume.summary %></textarea>
         </section>
         
         <section class="flex-col">
@@ -57,10 +58,10 @@
             <div class="experience flex-wrap">
               <input type="hidden" name="exp[<%= exp.id %>][id]" value="<%= exp.id %>">
               <button type="button" class="delete-experience-btn" data-id="<%= exp.id %>">Remove</button>
-              <label class="input-wide">Title
+              <label>Title
                 <input name="exp[<%= exp.id %>][title]" value="<%= exp.title %>">
               </label>
-              <label class="input-wide">Location
+              <label>Location
                 <input name="exp[<%= exp.id %>][location]" value="<%= exp.location %>">
               </label>
               <label>Start
@@ -69,7 +70,7 @@
               <label>End
                 <input name="exp[<%= exp.id %>][end]" value="<%= exp.end %>">
               </label>
-              <label class="input-wide">Summary
+              <label>Summary
                 <textarea name="exp[<%= exp.id %>][summary]" rows="6"><%= exp.summary %></textarea>
               </label>
             </div>

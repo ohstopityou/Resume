@@ -82,7 +82,7 @@ module.exports = class database {
     return rows
   }
 
-  updateResume (resume) {
+  async updateResume (resume) {
     const query = `
     UPDATE resumes
     SET worktitle = ?,
@@ -94,7 +94,7 @@ module.exports = class database {
     postcode = ?,
     city = ?
     WHERE id = ?`
-    this.db.execute(query,
+    await this.db.execute(query,
       [
         resume.worktitle,
         resume.summary,
@@ -106,11 +106,9 @@ module.exports = class database {
         resume.city,
         resume.id
       ])
-      .then(console.log('Updated resume'))
-      .catch(console.log)
   }
 
-  updateExperience (experience) {
+  async updateExperience (experience) {
     const query = `
     UPDATE experiences
     SET title = ?,
@@ -119,7 +117,7 @@ module.exports = class database {
     end = ?,
     summary = ?
     WHERE id = ?`
-    this.db.execute(query,
+    await this.db.execute(query,
       [
         experience.title,
         experience.location,
@@ -128,14 +126,10 @@ module.exports = class database {
         experience.summary,
         experience.id
       ])
-      .then(console.log('Updated experience'))
-      .catch(err => { console.log('problems inserting: ' + err) })
   }
 
-  deleteExperience (experienceid) {
+  async deleteExperience (experienceid) {
     const query = `DELETE FROM experiences WHERE id = ?`
-    this.db.execute(query, [experienceid])
-      .then(console.log('Deleted experience'))
-      .catch(err => { console.log('problems inserting: ' + err) })
+    await this.db.execute(query, [experienceid])
   }
 }

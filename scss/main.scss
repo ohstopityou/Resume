@@ -19,7 +19,7 @@ main {
 #editor-section {
   flex-basis: 50%;
   flex-grow: 1;
-  padding: 2em;
+  padding: 2rem;
   overflow: scroll;
 }
 
@@ -41,34 +41,52 @@ header {
     margin: 0 auto;
     max-width: 700px;
 
+    section:not(:last-child) {
+      margin-bottom: 2rem;
+    }
+
     h2 {
+      color: #222;
+    }
+
+    h2, p {
       width: 100%;
+      padding: 0.5rem;
     }
 
     label {
-      color: #333;
-      padding: 0.5em;
+      font-weight: 300;
+      font-size: 16px;
+      color: #666;
+      padding: 0.5rem;
       flex-grow: 1;
-      flex-basis: 50%;
+      flex-basis: 200px;
     }
 
-    .input-wide {
-      flex-basis: 250px;
+    .experience {
+      position: relative;
+      padding: 1rem 0;
+      border-top: 1px solid #eee;
+    
+      .delete-experience-btn {
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
     }
   }
 }
-.experience {
-  border-bottom: 3px solid black;
-}
 
 input, textarea {
+  margin-top: 0.4rem;
+  font-size: 0.9em;
   width: 100%;
   outline: none;
   resize: none;
   border: 0;
-  padding : 0.5em;
-  border-radius: 2px;
-  background: #eee;
+  padding : 10px 15px;
+  border-radius: 5px;
+  background: rgb(240, 240, 240);
 }
 
 #preview-section {
