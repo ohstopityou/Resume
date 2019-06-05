@@ -2,25 +2,27 @@
 
 const router = require('express').Router()
 const formParser = require('body-parser').urlencoded({ extended: false })
+
+// Parser configured to recieve a form including a single image.
+// Stores the image profilepic (max 5MB) in memory.
 const Multer = require('multer')
-const multerconfig = {
+const multiformParser = Multer({
   storage: Multer.MemoryStorage,
-  limits: { fileSize: 5 * 1024 * 1024 } // 5Mb
-}
-const multiformParser = Multer(multerconfig).single('profilepic')
+  limits: { fileSize: 5 * 1024 * 1024 }
+}).single('profilepic')
 
 // Connect to database
 const Database = require('./database')
 const db = new Database()
 db.connect()
 
-// Login middleware
+// Middleware that makes sure user is available in cookie
 const requireLogin = (req, res, next) => {
   // Renders login screen if not logged in
   req.session.user ? next() : res.render('login')
 }
 
-// Resume middleware
+// Middleware that makes sure a resume is available in cookie
 const requireResume = (req, res, next) => {
   // Continues if a resume is selected
   if (req.session.resume) return next()
@@ -35,12 +37,7 @@ const requireResume = (req, res, next) => {
 // Ignores requests to favicon
 router.get('/favicon.ico', (req, res) => res.sendStatus(204))
 
-// Redirects to editor if logged in
-router.get('/', requireLogin, (req, res) => {
-  res.redirect('/login')
-})
-
-// Handles signup requests
+// Handles signup requests sent from normal form
 router.post('/signup', formParser, async (req, res, next) => {
   const email = req.body.email
   const password = req.body.password
@@ -53,50 +50,51 @@ router.post('/signup', formParser, async (req, res, next) => {
   const userid = await db.newUser(email, password)
   req.session.user = userid
 
-  // Create new resume, save to session, redirect
+  // Create new resume with 1 experience, save to session, redirect
   const resumeid = await db.newResume(userid)
+  await db.newExperience(resumeid)
   req.session.resume = resumeid
-  res.redirect('editor')
+  res.redirect('/')
 })
 
-router.route('/login')
-  .get(requireLogin, (req, res) => {
-    res.redirect('editor')
-  })
-  .post(formParser, async (req, res, next) => {
-    const email = req.body.email
-    const password = req.body.password
-    if (!email || !password) return next('Missing username or password')
+// Handles login requests sent from normal form
+router.post('/login', formParser, async (req, res, next) => {
+  const email = req.body.email
+  const password = req.body.password
+  if (!email || !password) return next('Missing username or password')
 
-    const user = await db.getUser(email)
-    const correctPassword = await db.verifyUser(user, password)
-    if (!correctPassword) return next('Wrong username or password')
+  const user = await db.getUser(email)
+  const correctPassword = await db.verifyUser(user, password)
+  if (!correctPassword) return next('Wrong username or password')
 
-    // Save user to session
-    req.session.user = user.id
-    res.redirect('editor')
-  })
+  // Save user to session, redirect
+  req.session.user = user.id
+  res.redirect('/')
+})
 
-router.get('/editor', requireLogin, requireResume, async (req, res) => {
-  // Load resume and experience, then render in the editor
+// Handles requests to view editor
+router.get('/editor', requireLogin, requireResume, async (req, res, next) => {
   const resumeid = req.session.resume
-  const [resume, experiences] = await Promise.all([db.getResume(resumeid), db.getExperiences(resumeid)])
-  res.render('editor', { resume: resume, experiences: experiences })
-})
-
-router.get('/logout', (req, res) => {
-  req.session = null
-  res.redirect('login')
+  // Query db for resume and experiences in parallell
+  Promise.all([db.getResume(resumeid), db.getExperiences(resumeid)])
+    // Render editor using data recieved from query. Data is an array containing both responses
+    .then(data => res.render('editor', { resume: data.shift(), experiences: data.shift() }))
+    .catch(err => next('Problems rendering editor: ' + err))
 })
 
 router.route('/resume')
-  .get(requireLogin, requireResume, async (req, res) => {
+  // Handles requests to view resume (used by preview iframe)
+  .get(requireLogin, requireResume, async (req, res, next) => {
     const resumeid = req.session.resume
-    const [resume, experiences] = await Promise.all([db.getResume(resumeid), db.getExperiences(resumeid)])
-    res.render('resume', { resume: resume, experiences: experiences })
+    // Query db for resume and experiences in parallell
+    Promise.all([db.getResume(resumeid), db.getExperiences(resumeid)])
+      // Render resume using data recieved from query. Data is an array containing both responses
+      .then(data => res.render('resume', { resume: data.shift(), experiences: data.shift() }))
+      .catch(err => next('Problems rendering resume: ' + err))
   })
+  // Handles resume updates sent from multipart form
   .put(multiformParser, async (req, res, next) => {
-    // Array that holds functions to be run in parallell
+    // Array that holds I/O operations
     const ioPromises = []
 
     // Create valid resume and update
@@ -104,7 +102,7 @@ router.route('/resume')
     for (let key in resume) { resume[key] = resume[key] || null }
     ioPromises.push(db.updateResume(resume))
 
-    // Update all experiences
+    // Update all evailable experiences
     let experiences = resume.exp
     if (experiences) {
       for (let id in experiences) { ioPromises.push(db.updateExperience(experiences[id])) }
@@ -113,27 +111,49 @@ router.route('/resume')
     // Upload profile picture to cloud
     if (req.file) { ioPromises.push(db.uploadImg(req.file, resume.id)) }
 
+    // Runs I/O operations on db in parallell
     Promise.all(ioPromises)
-      .then(res.sendStatus(204))
+      // Returns 204 if update ok, else forward error to errorhandler
+      .then(ok => res.sendStatus(204))
       .catch(next)
   })
 
-router.post('/experience/new', requireLogin, requireResume, (req, res) => {
+// Handles requests to add a new experience to current resume
+router.post('/experience/new', requireLogin, requireResume, (req, res, next) => {
   db.newExperience(req.session.resume)
+    .then(ok => res.sendStatus(204))
+    .catch(next)
 })
 
-router.delete('/experience/:id', requireLogin, requireResume, async (req, res) => {
-  // TODO: check if experience belongs to resume
+// Handles requests to delete a specific experience
+// TODO: FIX: Experience can be deleted by anyone
+router.delete('/experience/:id', requireLogin, async (req, res, next) => {
   db.deleteExperience(req.params.id)
+    .then(ok => res.sendStatus(204))
+    .catch(next)
 })
 
+// Deletes user session and redirects to homepage
+router.get('/logout', (req, res, next) => {
+  req.session = null
+  res.redirect('/')
+})
+
+// Homepage route. Redirects to editor
+router.get('/', requireLogin, (req, res) => {
+  res.redirect('editor')
+})
+
+// Redirects all other requests to homepage
 router.all('*', (req, res) => {
   res.redirect('/')
 })
 
-// Error handler
+// Middleware that handles all errors. Called using next()
 router.use((err, req, res, next) => {
-  console.log('Caught by the error gang: ' + err)
+  // Prints error to server console
+  console.error(err)
+  // Renders login screen with error message box
   res.status(500).render('login', { error: err })
 })
 

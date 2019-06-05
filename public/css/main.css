@@ -41,7 +41,7 @@ main {
 #editor-section {
   flex-basis: 50%;
   flex-grow: 1;
-  padding: 2em;
+  padding: 2rem;
   overflow: scroll;
 }
 
@@ -62,31 +62,45 @@ header {
   margin: 0 auto;
   max-width: 700px;
 }
+#editor-section #editor section:not(:last-child) {
+  margin-bottom: 2rem;
+}
 #editor-section #editor h2 {
+  color: #222;
+}
+#editor-section #editor h2, #editor-section #editor p {
   width: 100%;
+  padding: 0.5rem;
 }
 #editor-section #editor label {
-  color: #333;
-  padding: 0.5em;
+  font-weight: 300;
+  font-size: 16px;
+  color: #666;
+  padding: 0.5rem;
   flex-grow: 1;
-  flex-basis: 50%;
+  flex-basis: 200px;
 }
-#editor-section #editor .input-wide {
-  flex-basis: 250px;
+#editor-section #editor .experience {
+  position: relative;
+  padding: 1rem 0;
+  border-top: 1px solid #eee;
 }
-
-.experience {
-  border-bottom: 3px solid black;
+#editor-section #editor .experience .delete-experience-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 input, textarea {
+  margin-top: 0.4rem;
+  font-size: 0.9em;
   width: 100%;
   outline: none;
   resize: none;
   border: 0;
-  padding: 0.5em;
-  border-radius: 2px;
-  background: #eee;
+  padding: 10px 15px;
+  border-radius: 5px;
+  background: #f0f0f0;
 }
 
 #preview-section {

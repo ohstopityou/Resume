@@ -45,6 +45,6 @@ async function saveResume () {
 }
 
 function handleError (msg) {
-  console.error('--- Something went wrong ---')
+  console.log('--- Something went wrong ---')
   console.error(msg)
 }
