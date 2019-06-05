@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/main.css">
+    <link href="css/main.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Oswald&display=swap" rel="stylesheet">
     <script defer src="js/main.js"></script>
     <title>Resume Builder</title>
 </head>
@@ -23,12 +24,12 @@
             <input name="name" value="<%= resume.name %>">
           </label>
           <label>Picture URL
-            <input name="profilepic" type="file" value="test">
+            <input name="profilepic" type="file" accept="image/*">
           </label>
           <label>Work Title
             <input name="worktitle" value="<%= resume.worktitle %>" placeholder="Student, Electrician">
           </label>
-          <label>Emai
+          <label>Email
             <input name="email" type="email" value="<%= resume.email %>">
           </label>
           <label>Phone
@@ -85,6 +86,7 @@
       <div id="preview-hover">
         <button type="button" id="toggle-editor-btn">Toggle editor</button>
         <button type="button" id="update-btn">Update</button>
+        <button type="button" id="print-btn">Print</button>
       </div>
     </div>
   </main>

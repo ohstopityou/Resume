@@ -24,8 +24,11 @@ img {
 }
 
 body {
-  font-family: sans-serif;
   height: 100vh;
+}
+
+h1 {
+  font-family: "Oswald", sans-serif;
 }
 
 .paper {
@@ -56,7 +59,8 @@ button, .button {
 }
 
 input, textarea {
-  margin-top: 0.4rem;
+  margin-top: 5px;
+  margin-bottom: 3px;
   font-size: 0.9em;
   width: 100%;
   outline: none;
@@ -67,7 +71,12 @@ input, textarea {
   background: #f0f0f0;
 }
 
+textarea {
+  line-height: 1.5em;
+}
+
 input:focus, textarea:focus {
+  margin-bottom: 0;
   border-bottom: 3px solid #0af;
 }
 

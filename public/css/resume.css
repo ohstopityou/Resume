@@ -23,15 +23,10 @@ img {
   height: auto;
 }
 
-html, body {
-  font-size: 16px;
-  width: 21cm;
-  height: 29.7cm;
-}
-
 /* Styling */
 body {
   display: flex;
+  font-size: 16px;
 }
 
 #picture {
@@ -43,16 +38,6 @@ body {
   margin: 2em auto;
 }
 
-/* Main Section */
-.content {
-  width: 70%;
-  padding: 1em;
-}
-
-.wrapper {
-  margin: 1em 0;
-}
-
 /* Sidebar */
 aside {
   width: 30%;
@@ -60,12 +45,28 @@ aside {
   background: #0af;
 }
 
+/* Main Section */
+main {
+  width: 70%;
+  padding: 1em;
+}
+
+.experience {
+  margin: 1em 0;
+}
+
 /* Text Styling */
 p, li {
   font-family: sans-serif;
 }
 
-#name {
+p {
+  color: #444;
+  line-height: 1.5;
+  font-weight: 300;
+}
+
+h1 {
   font-size: 2.5em;
   color: #222;
 }
@@ -75,16 +76,18 @@ p, li {
   margin-bottom: 1em;
 }
 
-.summary {
-  text-align: left;
-  color: #444;
-  line-height: 1.5;
-  font-weight: 300;
-  margin: 0.5em 0;
+h1, h2, .capitalize {
+  text-transform: capitalize;
 }
 
-#address, #city, #name, #title {
+.title {
   text-transform: capitalize;
+  font-weight: bold;
+}
+
+.location {
+  font-style: italic;
+  font-weight: 300;
 }
 
 .duration {
@@ -94,17 +97,7 @@ p, li {
   font-size: 0.8em;
 }
 
-.title {
-  text-transform: capitalize;
-  font-weight: bold;
-}
-
-.origin {
-  font-style: italic;
-  font-weight: 300;
-}
-
-.content h3 {
+main h3 {
   color: #0af;
   font-size: 1.5em;
   margin-top: 1em;
@@ -135,8 +128,7 @@ aside li {
   margin: 0;
 }
 @media print {
-  html {
-    margin: 0;
-    padding: 0;
+  body {
+    -webkit-print-color-adjust: exact !important;
   }
 }
