@@ -20,10 +20,11 @@ module.exports = class database {
     // Create unique name for cloud storage
     const ext = img.originalname.split('.').pop()
     const fileName = `${Date.now()}.${ext}`
+    const bucketName = 'resume-profilepictures'
 
     // Upload image to cloud bucket
     await this.storage
-      .bucket('resume-profilepictures')
+      .bucket(bucketName)
       .file(fileName)
       .save(img.buffer)
 
@@ -51,8 +52,8 @@ module.exports = class database {
   }
 
   // Verifies that a submitted password matches the users hashed password
-  async verifyUser (user, password) {
-    const match = await bcrypt.compare(password, user.password)
+  async verifyPass (submitted, stored) {
+    const match = await bcrypt.compare(submitted, stored)
     // Returns a boolean
     return match
   }

@@ -2,41 +2,40 @@
   <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link rel="stylesheet" href="css/resume.css">
-      <!-- <link rel="stylesheet" href="../css/resume.css">
-      <link rel="stylesheet" href="../public/css/resume.css"> -->
-      <title>Resume Preview</title>
+      <link href="css/resume.css" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css?family=Oswald&display=swap" rel="stylesheet">
+      <!-- Title is invisible character as I was not able to remove during print -->
+      <title>&#65279;</title>
   </head>
   <body>
       <aside>
        <img src="<%- resume.picture %>" alt="profile picture" id="picture">
-        <section id="contact-info">
+        <section>
           <h3>Contact Info</h3>
           <ul>
-            <li id="email"><%= resume.email %></li>
-            <li id="phone"><%= resume.phone %></li>
-            <li id="address"><%= resume.address %></li>
-            <li><span id="postcode"><%= resume.postcode %></span> <span id="city"><%= resume.city %></span></li>
+            <li><%= resume.email %></li>
+            <li><%= resume.phone %></li>
+            <li><span class="capitalize"><%= resume.address %></span></li>
+            <li><%= resume.postcode %> <span class="capitalize"><%= resume.city %></span></li>
           </ul>  
         </section>
- 
       </aside>
-      <div class="content">
+      <main>
         <header>
-          <h1 id="name" class="capitalize"><%= resume.name %></h1>
-          <h2 id="work-title"> <%= resume.worktitle %> </h2>
-          <p id="about" class="summary"></p> <%= resume.summary %> </p>
+          <h1><%= resume.name %></h1>
+          <h2><%= resume.worktitle %></h2>
+          <p><%= resume.summary %></p>
         </header>
-        <section id="experience">
+        <section>
           <h3>Experience</h3>
           <% experiences.forEach(function(exp) { %>
-            <div class="wrapper">
+            <div class="experience">
               <p class="duration"><time><%= exp.start %></time> - <time><%= exp.end %></time></p>
-              <h4><span class="title"><%= exp.title %></span> - <span class="origin"><%= exp.location %></span></h4>
-              <p class="summary"><%= exp.summary %></p>
+              <h4><span class="title"><%= exp.title %></span> - <span class="location"><%= exp.location %></span></h4>
+              <p><%= exp.summary %></p>
             </div>
           <% }); %>
         </section>
-      </div>
+      </main>
   </body>
 </html>

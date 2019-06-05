@@ -12,6 +12,11 @@ document.getElementById('update-btn').addEventListener('click', () => {
     .catch(handleError)
 })
 
+// Button that prints resume
+document.getElementById('print-btn').addEventListener('click', () => {
+  document.getElementById('preview').contentWindow.print()
+})
+
 // Button that creates a new experience
 document.getElementById('new-experience-btn').addEventListener('click', () => {
   saveResume()

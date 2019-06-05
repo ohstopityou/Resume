@@ -19,7 +19,6 @@ db.connect()
 // Middleware that makes sure user is available in cookie
 const requireLogin = (req, res, next) => {
   // Renders login screen if not logged in
-  console.log(req.session)
   req.session.user ? next() : res.render('login')
 }
 
@@ -65,7 +64,9 @@ router.post('/login', formParser, async (req, res, next) => {
   if (!email || !password) return next('Missing username or password')
 
   const user = await db.getUser(email)
-  const correctPassword = await db.verifyUser(user, password)
+  if (!user) return next('User not found')
+
+  const correctPassword = await db.verifyPass(password, user.password)
   if (!correctPassword) return next('Wrong username or password')
 
   // Save user to session, redirect
@@ -100,7 +101,11 @@ router.route('/resume')
 
     // Create valid resume and update
     let resume = req.body
-    for (let key in resume) { resume[key] = resume[key] || null }
+    for (let key in resume) {
+      console.log(resume[key])
+      resume[key] = resume[key] || null
+      console.log(resume[key])
+    }
     ioPromises.push(db.updateResume(resume))
 
     // Update all evailable experiences
@@ -110,6 +115,7 @@ router.route('/resume')
     }
 
     // Upload profile picture to cloud
+    // TODO: Check if file is an image
     if (req.file) { ioPromises.push(db.uploadImg(req.file, resume.id)) }
 
     // Runs I/O operations on db in parallell
