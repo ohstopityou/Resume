@@ -1,6 +1,104 @@
+html {
+  box-sizing: border-box;
+  font-size: 16px;
+  overflow: hidden;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+html, body, h1, h2, h3, h4, h5, h6, p, ol, ul {
+  margin: 0;
+  padding: 0;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
 body {
+  font-family: sans-serif;
   height: 100vh;
-  background-image: linear-gradient(to top right, blue, lightblue);
+}
+
+.paper {
+  padding: 2em;
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+button, .button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 3px;
+  box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.2);
+  margin: 5px;
+  color: #0af;
+  background: white;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.button-main {
+  color: white;
+  background: #0af;
+}
+
+input, textarea {
+  margin-top: 0.4rem;
+  font-size: 0.9em;
+  width: 100%;
+  outline: none;
+  resize: none;
+  border: 0;
+  padding: 10px 15px;
+  border-radius: 5px;
+  background: #f0f0f0;
+}
+
+input:focus, textarea:focus {
+  border-bottom: 3px solid #0af;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+body {
   display: grid;
   place-items: center;
+  background-image: linear-gradient(to top right, blue, #0af);
+}
+
+#login {
+  position: relative;
+  bottom: 5em;
+  width: 80%;
+  max-width: 20em;
+}
+#login * {
+  margin-top: 10px;
+}
+#login #error-popup {
+  position: absolute;
+  width: 100%;
+  bottom: -10em;
+  left: 0;
 }

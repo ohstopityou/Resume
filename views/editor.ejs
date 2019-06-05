@@ -4,18 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/main.css">
-    <script defer src="../js/main.js"></script>
-    <!-- <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../public/css/main.css"> -->
+    <script defer src="js/main.js"></script>
     <title>Resume Builder</title>
 </head>
 <body class="flex-col">
   <header>
     <h1>Resume Builder</h1>
-    <a href="/logout">Log Out</a>
+    <a class="button" href="/logout">Log Out</a>
   </header>
   <main>
     <div id="editor-section">
+      <!-- For some reason, autocomplete does not work on this form -->
       <form action="#" id="editor" class="flex-col" autocomplete="off">
         <input type="hidden" name="id" value="<%= resume.id %>">
         <section class="flex-wrap">
@@ -29,7 +28,7 @@
           <label>Work Title
             <input name="worktitle" value="<%= resume.worktitle %>" placeholder="Student, Electrician">
           </label>
-          <label>Email
+          <label>Emai
             <input name="email" type="email" value="<%= resume.email %>">
           </label>
           <label>Phone
@@ -81,7 +80,7 @@
     </div>
     <div id="preview-section">
       <div id="preview-wrapper">
-        <iframe id="preview" src="/resume" class="paper"></iframe> 
+        <iframe id="preview" src="/resume" class="paper a4"></iframe> 
       </div>
       <div id="preview-hover">
         <button type="button" id="toggle-editor-btn">Toggle editor</button>
