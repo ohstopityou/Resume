@@ -19,6 +19,7 @@ db.connect()
 // Middleware that makes sure user is available in cookie
 const requireLogin = (req, res, next) => {
   // Renders login screen if not logged in
+  console.log(req.session)
   req.session.user ? next() : res.render('login')
 }
 
@@ -26,7 +27,7 @@ const requireLogin = (req, res, next) => {
 const requireResume = (req, res, next) => {
   // Continues if a resume is selected
   if (req.session.resume) return next()
-  // else selects the last resume made
+  // else adds most recent resume to session
   db.getResumeIdsFromUser(req.session.user)
     .then(resumes => {
       req.session.resume = resumes.pop().id

@@ -1,6 +1,26 @@
+@import 'reset';
+@import 'shared';
+
 body {
-    height: 100vh;
-    background-image: linear-gradient(to top right,  blue, lightblue);
     display: grid;
     place-items: center;
+    background-image: linear-gradient(to top right,  blue, #0af);
+}
+
+#login {
+    position: relative;
+    bottom: 5em;
+    width: 80%;
+    max-width: 20em;
+
+    * {
+        margin-top: 10px;
+    }
+
+    #error-popup {
+        position: absolute;
+        width: 100%;
+        bottom: -10em;
+        left: 0;
+    }
 }
