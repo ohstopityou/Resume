@@ -5,7 +5,7 @@ const config = {
   host     : '127.0.0.1',
   user     : 'root',
   password : 'easypass',
-  database : 'dk205_AfN19'
+  database : 'dk205_AfN19_new'
 }
 
 // Uses a socketPath when run in production

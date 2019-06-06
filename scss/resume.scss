@@ -9,8 +9,9 @@ body {
 }
 
 #picture {
+  // Crops top center part of image
   object-fit: cover;
-  object-position: 100% 0;
+  object-position: 50% 0;
   height: 10em;
   width: 10em;
   border-radius: 50%;
