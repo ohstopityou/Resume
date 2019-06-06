@@ -1,6 +1,6 @@
 body {
   height: 100vh;
-  background-color: #fff;
+  background: #fafafa;
   font-family: sans-serif;
 }
 
@@ -14,7 +14,7 @@ header {
   align-items: center;
   justify-content: space-between;
   padding: 0 3em;
-  background: #0af;
+  background-image: linear-gradient(to bottom right, blue, #0af);
   color: #fff;
   height: 3em;
   text-align: center;
