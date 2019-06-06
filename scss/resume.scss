@@ -23,14 +23,17 @@ body {
 aside {
   width: 30%;
   color: #fff;
-  background: #0af;
+  background-image: linear-gradient(to top, blue, #0af);
 }
 
 /* Main Section */
 
 main {
+  background: #fff;
+  position: relative;
   width: 70%;
   padding: 1em;
+  padding-bottom: 4em;
 }
 
 .experience {
