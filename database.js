@@ -67,12 +67,12 @@ module.exports = class database {
     return rows.insertId
   }
 
-  // Retrieves a list of resume IDs belonging to the user id
-  // Made to create a dashboard where the user can select between their resumes
+  // Retrieves an array of resume IDs belonging to the user id
   async getResumeIdsFromUser (userid) {
     const query = `SELECT id FROM resumes WHERE user_id = ?`
     const [rows, fields] = await this.db.execute(query, [userid])
-    return rows
+    // Return array with only id values
+    return rows.map(i => i.id)
   }
 
   // Retrieves a resume object
@@ -149,5 +149,14 @@ module.exports = class database {
   async deleteExperience (experienceid) {
     const query = `DELETE FROM experiences WHERE id = ?`
     await this.db.execute(query, [experienceid])
+  }
+
+  // Deletes an experience using an resume id
+  async deleteResume (resumeid) {
+    let query = `DELETE FROM resumes WHERE id = ?`
+    await this.db.execute(query, [resumeid])
+
+    query = `DELETE FROM experiences WHERE resume_id = ?`
+    await this.db.execute(query, [resumeid])
   }
 }

@@ -1,15 +1,8 @@
 @import 'reset';
 @import 'shared';
 
-body {
-  height: 100vh;
-  background-color: #fff;
-}
-
 main {
   display: flex;
-  width: 100vw;
-  height: calc(100vh - 3em);
 }
 
 #preview-section,
@@ -18,18 +11,6 @@ main {
   flex-grow: 1;
   padding: 2rem;
   overflow: scroll;
-}
-
-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 3em;
-  
-  background: #0af;
-  color: #fff;
-  height: 3em;
-  text-align: center;
 }
 
 #editor-section {
@@ -65,12 +46,6 @@ header {
       position: relative;
       padding: 1rem 0;
       border-top: 1px solid #eee;
-    
-      .delete-experience-btn {
-        position: absolute;
-        top: 0;
-        right: 0;
-      }
     }
   }
 }
@@ -81,22 +56,6 @@ header {
   place-items: center;
   background: #eee;
 
-  #preview-wrapper {
-    width: calc(var(--a4-w) * var(--resume-scale));
-    height: calc(var(--a4-h) * var(--resume-scale));
-
-    border-radius: 6px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    overflow: hidden;
-
-    #preview {
-      padding: 0;
-      border: 0;
-      transform: scale(var(--resume-scale));
-      transform-origin: 0 0;
-    }
-  }
-
   #preview-hover {
     position: fixed;
     margin: 2em;
@@ -105,19 +64,12 @@ header {
   }
 }
 
-.a4 {
-  width: var(--a4-w);
-  height: var(--a4-h);
-}
-
 .display-none {
   display: none;
 }
 
 :root {
   --resume-scale: 0.6;
-  --a4-h: 29.7cm;
-  --a4-w: 21cm;
 }
 
 @media only screen and (max-width: 1000px) {

@@ -2,8 +2,9 @@
   <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link href="css/resume.css" rel="stylesheet">
+      <link href="/css/resume.css" rel="stylesheet">
       <link href="https://fonts.googleapis.com/css?family=Oswald&display=swap" rel="stylesheet">
+      <script defer src="https://kit.fontawesome.com/5de75ec50a.js"></script>
       <!-- Title is invisible character as I was not able to remove during print -->
       <title>&#65279;</title>
   </head>
@@ -11,12 +12,12 @@
       <aside>
        <img src="<%- resume.picture %>" alt="profile picture" id="picture">
         <section>
-          <h3>Contact Info</h3>
+          <h3><i class="fas fa-address-card"></i> Contact Info</h3>
           <ul>
-            <li><%= resume.email %></li>
-            <li><%= resume.phone %></li>
-            <li><span class="capitalize"><%= resume.address %></span></li>
-            <li><%= resume.postcode %> <span class="capitalize"><%= resume.city %></span></li>
+            <li><i class="far fa-envelope"></i> <%= resume.email %></li>
+            <li><i class="fas fa-phone"></i> <%= resume.phone %></li>
+            <li><i class="fas fa-map-marker-alt"></i> <span class="capitalize"><%= resume.address %></span></li>
+            <li><i class="fas fa-city"></i> <%= resume.postcode %> <span class="capitalize"><%= resume.city %></span></li>
           </ul>  
         </section>
       </aside>

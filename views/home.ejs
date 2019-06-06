@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="/css/home.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Oswald&display=swap" rel="stylesheet">
+    <script defer src="https://kit.fontawesome.com/5de75ec50a.js"></script>
+    <script defer src="/js/home.js"></script>
+    <title>Resume Builder - Home</title>
+</head>
+<body>
+    <header>
+        <h1>Resume Builder</h1>
+        <a class="button" href="/logout">Log Out</a>
+    </header>
+    <main>
+        <div id="preview-container">
+                <% if(resumeIds) { resumeIds.forEach(function(id) { %>
+                    <div class="preview-wrapper" data-id="<%= id %>">
+                        <iframe src="/resume/<%= id %>" class="preview paper a4"></iframe>
+                        <div class="button button-delete delete-resume-btn"><i class="fas fa-trash-alt"></i></div>
+                    </div>
+                <% })}; %>
+            <button type="button" id="new-resume-btn">New Resume</button>
+        </div>
+        <% if (locals.error) { %>
+            <div id="error-popup" class="paper">
+                <h2>Oops!</h2>
+                <p><%= locals.error %></p>
+            </div>
+        <% } %>
+    </main>
+</body>
+</html>

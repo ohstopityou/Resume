@@ -22,18 +22,6 @@ const requireLogin = (req, res, next) => {
   req.session.user ? next() : res.render('login')
 }
 
-// Middleware that makes sure a resume is available in cookie
-const requireResume = (req, res, next) => {
-  // Continues if a resume is selected
-  if (req.session.resume) return next()
-  // else adds most recent resume to session
-  db.getResumeIdsFromUser(req.session.user)
-    .then(resumes => {
-      req.session.resume = resumes.pop().id
-      next()
-    })
-}
-
 // Ignores requests to favicon
 router.get('/favicon.ico', (req, res) => res.sendStatus(204))
 
@@ -50,10 +38,9 @@ router.post('/signup', formParser, async (req, res, next) => {
   const userid = await db.newUser(email, password)
   req.session.user = userid
 
-  // Create new resume with 1 experience, save to session, redirect
+  // Create new resume with 1 experience, redirect
   const resumeid = await db.newResume(userid)
   await db.newExperience(resumeid)
-  req.session.resume = resumeid
   res.redirect('/')
 })
 
@@ -75,37 +62,47 @@ router.post('/login', formParser, async (req, res, next) => {
 })
 
 // Handles requests to view editor
-router.get('/editor', requireLogin, requireResume, async (req, res, next) => {
-  const resumeid = req.session.resume
+router.get('/editor/:id', requireLogin, async (req, res, next) => {
+  const resumeid = req.params.id
+  // Save resume to session
+  req.session.resume = resumeid
   // Query db for resume and experiences in parallell
   Promise.all([db.getResume(resumeid), db.getExperiences(resumeid)])
     // Render editor using data recieved from query. Data is an array containing both responses
     .then(data => res.render('editor', { resume: data.shift(), experiences: data.shift() }))
-    .catch(err => next('Problems rendering editor: ' + err))
+    .catch(err => next('Could not load editor: ' + err))
 })
 
-router.route('/resume')
+// Home screen where you choose between your resumes
+router.get('/home', requireLogin, async (req, res, next) => {
+  db.getResumeIdsFromUser(req.session.user)
+    .then(ids => res.render('home', { resumeIds: ids }))
+    .catch(err => next('Could not load resumes: ' + err))
+})
+
+router.route('/resume/:id')
   // Handles requests to view resume (used by preview iframe)
-  .get(requireLogin, requireResume, async (req, res, next) => {
-    const resumeid = req.session.resume
+  .get(requireLogin, async (req, res, next) => {
+    const resumeid = req.params.id
     // Query db for resume and experiences in parallell
     Promise.all([db.getResume(resumeid), db.getExperiences(resumeid)])
       // Render resume using data recieved from query. Data is an array containing both responses
       .then(data => res.render('resume', { resume: data.shift(), experiences: data.shift() }))
-      .catch(err => next('Problems rendering resume: ' + err))
+      .catch(err => {
+        console.error(err)
+        // Simple error page to be shown in iframes
+        res.status(500).render('iframeError')
+      })
   })
   // Handles resume updates sent from multipart form
-  .put(multiformParser, async (req, res, next) => {
+  .put(requireLogin, multiformParser, async (req, res, next) => {
     // Array that holds I/O operations
     const ioPromises = []
 
     // Create valid resume and update
     let resume = req.body
-    for (let key in resume) {
-      console.log(resume[key])
-      resume[key] = resume[key] || null
-      console.log(resume[key])
-    }
+    // TODO Verify if null is set correctly
+    for (let key in resume) { resume[key] = resume[key] || null }
     ioPromises.push(db.updateResume(resume))
 
     // Update all evailable experiences
@@ -124,10 +121,23 @@ router.route('/resume')
       .then(ok => res.sendStatus(204))
       .catch(next)
   })
+  // Deletes a resume and its experiences
+  .delete(requireLogin, async (req, res, next) => {
+    db.deleteResume(req.params.id)
+      .then(ok => res.sendStatus(204))
+      .catch(next)
+  })
+
+router.post('/resume/new', requireLogin, (req, res, next) => {
+  db.newResume(req.session.user)
+    .then(id => db.newExperience(id))
+    .then(ok => res.sendStatus(204))
+    .catch(next)
+})
 
 // Handles requests to add a new experience to current resume
-router.post('/experience/new', requireLogin, requireResume, (req, res, next) => {
-  db.newExperience(req.session.resume)
+router.post('/resume/:id/experience/new', requireLogin, (req, res, next) => {
+  db.newExperience(req.params.id)
     .then(ok => res.sendStatus(204))
     .catch(next)
 })
@@ -148,20 +158,26 @@ router.get('/logout', (req, res, next) => {
 
 // Homepage route. Redirects to editor
 router.get('/', requireLogin, (req, res) => {
-  res.redirect('editor')
+  res.redirect('home')
 })
 
 // Redirects all other requests to homepage
+// TODO: Better 404 error handler. Use next below
 router.all('*', (req, res) => {
-  res.redirect('/')
+  res.status(404).redirect('/')
 })
 
 // Middleware that handles all errors. Called using next()
 router.use((err, req, res, next) => {
   // Prints error to server console
   console.error(err)
+
   // Renders login screen with error message box
-  res.status(500).render('login', { error: err })
+  if (!req.session.user) {
+    res.render('login', { error: err })
+  } else {
+    res.render('home', { error: err })
+  }
 })
 
 module.exports = router
