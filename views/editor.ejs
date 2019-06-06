@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="css/main.css" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Oswald&display=swap" rel="stylesheet">
-    <script defer src="js/main.js"></script>
+    <script defer src="https://kit.fontawesome.com/5de75ec50a.js"></script>
+    <script defer src="/js/editor.js"></script>
     <title>Resume Builder</title>
 </head>
 <body class="flex-col">
   <header>
-    <h1>Resume Builder</h1>
+      <a href="/home"><h1>Resume Builder</h1></a>
     <a class="button" href="/logout">Log Out</a>
   </header>
   <main>
     <div id="editor-section">
       <!-- For some reason, autocomplete does not work on this form -->
-      <form action="#" id="editor" class="flex-col" autocomplete="off">
+      <form action="#" id="editor" class="flex-col" autocomplete="off" data-id="<%= resume.id %>">
         <input type="hidden" name="id" value="<%= resume.id %>">
         <section class="flex-wrap">
           <h2>Personal Info</h2>
@@ -38,11 +39,11 @@
           <label>Address
             <input name="address" value="<%= resume.address %>">
           </label>
+          <label>Post Code
+              <input name="postcode" type="number" value="<%= resume.postcode %>">
+            </label>
           <label>City
             <input name="city" value="<%= resume.city %>">
-          </label>
-          <label>Post Code
-            <input name="postcode" type="number" value="<%= resume.postcode %>">
           </label>
         </section>
         <section>
@@ -57,7 +58,7 @@
           <% experiences.forEach(function(exp) { %>
             <div class="experience flex-wrap">
               <input type="hidden" name="exp[<%= exp.id %>][id]" value="<%= exp.id %>">
-              <button type="button" class="delete-experience-btn" data-id="<%= exp.id %>">Remove</button>
+              <button type="button" class="button-delete delete-experience-btn" data-id="<%= exp.id %>"><i class="fas fa-trash-alt"></i></button>
               <label>Title
                 <input name="exp[<%= exp.id %>][title]" value="<%= exp.title %>">
               </label>
@@ -80,13 +81,13 @@
       </form>
     </div>
     <div id="preview-section">
-      <div id="preview-wrapper">
-        <iframe id="preview" src="/resume" class="paper a4"></iframe> 
+      <div class="preview-wrapper">
+        <iframe id="preview" src="/resume/<%= resume.id %>" class="preview paper a4"></iframe> 
       </div>
       <div id="preview-hover">
-        <button type="button" id="toggle-editor-btn">Toggle editor</button>
-        <button type="button" id="update-btn">Update</button>
-        <button type="button" id="print-btn">Print</button>
+        <button type="button" id="toggle-editor-btn">Editor <i class="fas fa-toggle-on"></i></button>
+        <button type="button" id="update-btn">Update <i class="fas fa-sync-alt"></i></button>
+        <button type="button" id="print-btn">Print <i class="fas fa-print"></i></button>
       </div>
     </div>
   </main>

@@ -1,11 +1,11 @@
 @import 'reset';
-// @import 'shared';
 
 /* Styling */
 
 body {
   display: flex;
   font-size: 16px;
+  font-family: 'Oswald', sans-serif;
 }
 
 #picture {
@@ -92,8 +92,8 @@ h4 {
 
 aside h3 {
   background: rgba(0,0,0,0.3);
-  padding-left: 1em;
-  line-height: 1.5em;
+  padding-left: 0.8em;
+  line-height: 2em;
 }
 
 aside ul {
@@ -101,7 +101,7 @@ aside ul {
 }
 
 aside li {
-  margin: 0.5em 0;
+  margin: 0.8em 0;
 }
 
 /* Print */

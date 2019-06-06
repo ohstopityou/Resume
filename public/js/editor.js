@@ -1,6 +1,10 @@
 'use strict'
 
+const resumeId = document.getElementById('editor').dataset.id
+
 // Button that hides or shows editor section
+// TODO: Toggle between on and off icon
+// <i class="fas fa-toggle-on||off"></i>
 document.getElementById('toggle-editor-btn').addEventListener('click', () => {
   document.getElementById('editor-section').classList.toggle('display-none')
 })
@@ -20,7 +24,7 @@ document.getElementById('print-btn').addEventListener('click', () => {
 // Button that creates a new experience
 document.getElementById('new-experience-btn').addEventListener('click', () => {
   saveResume()
-    .then(fetch('/experience/new', { method: 'POST' }))
+    .then(fetch(`/resume/${resumeId}/experience/new`, { method: 'POST' }))
     .then(refreshPage())
     .catch(handleError)
 })
@@ -46,7 +50,7 @@ function refreshResume () {
 
 async function saveResume () {
   const resume = document.getElementById('editor')
-  await fetch('/resume', { method: 'PUT', body: new FormData(resume) })
+  await fetch(`/resume/${resumeId}`, { method: 'PUT', body: new FormData(resume) })
 }
 
 function handleError (msg) {

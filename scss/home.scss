@@ -1,0 +1,60 @@
+@import 'reset';
+@import 'shared';
+
+body {
+    background-image: linear-gradient(to top right,  blue, #0af);
+}
+
+main {
+    display: grid;
+    place-items: center;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 3em;
+    
+    background: #0af;
+    color: #fff;
+    height: 3em;
+    text-align: center;
+  }
+
+#preview-container {
+    display: flex;
+    position: relative;
+    bottom: 5em;
+
+    .preview-wrapper {
+        display: block;
+        cursor: pointer;
+        position: relative;
+        margin: 2em;
+
+        .preview {
+            position: absolute;
+            z-index: -1;
+        }
+    }
+
+    #new-resume-btn {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: -3em;
+        height: 3em;
+    }
+}
+
+#error-popup {
+    position: relative;
+    bottom: 15em;
+    width: 80%;
+    max-width: 25em;
+}
+
+:root {
+    --resume-scale: 0.3;
+  }
